@@ -30,41 +30,61 @@ grant select on paciente to doctor1;
 
 
 -------TABLAS------------
-drop table paciente
-create table paciente(
-identificacion varchar(10) NOT NULL,
-nombres varchar(50),
-apellidos varchar(50),
-fecha_nacimiento varchar(10),
-provincia varchar(50),
-codigo_postal varchar(5),
-direccion varchar(50),
-telefono varchar(10)
+
+
+---------USUARIOS---------
+
+create table Rol(
+IDRol int PRIMARY KEY identity (100,1),
+Rol varchar(50)
+
 );
 
+insert into Rol(Rol) values('PACIENTE'),('MEDICO');
 
+create table Usuarios(
+IDUsuario int PRIMARY KEY identity (100,1),
+ID_DatosUsuario int,
+Usuario varchar(50)unique,
+Contraseña varchar(50),
+Rol int,
+Activa char(1),
+constraint Rolfk FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
+constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE),
+constraint UsuarioMCfk FOREIGN KEY (ID_DatosUsuario) REFERENCES Medico(ID_medico)
+);
+-----------PACIENTES----------
+drop table pacientes
+create table pacientes(
+ID_PACIENTE int PRIMARY KEY identity (001,1),
+Cedula varchar(10) NOT NULL,
+Nombres varchar(50),
+Apellidos varchar(50),
+Fecha_nacimiento varchar(10),
+Provincia varchar(50),
+canton varchar(50),
+Codigo_postal varchar(5),
+Direccion varchar(50),
+Telefono varchar(10),
+NumCelular varchar(10),
 
+);
+alter table pacientes
+add canton varchar(50);
+delete from pacientes
+select*from pacientes
 ----INGRESO DE DATOS PACIENTE
-insert into  paciente (identificacion,nombres,apellidos, fecha_nacimiento,provincia,codigo_postal,direccion,telefono )
-values('0946584566','Angel','Vergara','31/01/2000','Guayas','09465','xxxxxx','0984659455');
-insert into  paciente (identificacion,nombres,apellidos, fecha_nacimiento,provincia,codigo_postal,direccion,telefono )
-values('0985694588','David','Paredes','24/04/1999','Guayas','0945','xxxxx','0954685666');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1718593209','Lucía','García','08/09/1992','Pichincha','17010','Calle A No.23-45','0987456321');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('0914761293','Pedro','Martínez','12/05/1985','Manabí','13010','Avenida B No.34-12','0987123456');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1301876512','María','Paz','03/12/1976','Azuay','01010','Calle C No.12-34','0998456789');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1718645203','Andrés','Alvarado','25/06/1990','Esmeraldas','08010','Avenida D No.45-67','0967452314');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('0913758294','Sofía','Vásquez','14/10/1987','Los Ríos','12010','Calle E No.56-78','0987321567');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1314768295','Juan','Flores','28/02/1986','Imbabura','10010','Avenida F No.67-89','0997456321');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1314968210','Carla','Barrera','16/07/1983','El Oro','07010','Calle G No.78-90','0967452314');
-insert into paciente (identificacion,nombres,apellidos,fecha_nacimiento,provincia,codigo_postal,direccion,telefono) 
-values('1114768215','Fernando','Gómez','29/11/1991','Santa Elena','24010','Avenida H No.89-12','0987321567');
+insert into  pacientes(Cedula,Nombres,Apellidos ,Fecha_nacimiento,Provincia,Codigo_postal,Direccion,Telefono,NumCelular,canton )
+values('0946584566','Angel','Vergara','31/01/2000','Guayas','09465','xxxxxx','044541268','0984659455','Guayaquil'),
+('0985694588','David','Paredes','24/04/1999','Guayas','0945','xxxxx','041236845','0954685666','Guayaquil'),
+('1718593209','Lucía','García','08/09/1992','Guayas','17010','Calle A No.23-45','049685748','0987456321','Guayaquil'),
+('0914761293','Pedro','Martínez','12/05/1985','Guayas','13010','Avenida B No.34-12','049996874','0987123456','Guayaquil'),
+('1301876512','María','Paz','03/12/1976','Guayas','01010','Calle C No.12-34','041368588','0998456789','Guayaquil'),
+('1718645203','Andrés','Alvarado','25/06/1990','Guayas','08010','Avenida D No.45-67','0248695522','0967452314','Guayaquil'),
+('0913758294','Sofía','Vásquez','14/10/1987','Santa Elena','12010','Calle E No.56-78','027496684','0987321567','Salinas'),
+('0996548265','Juan','Flores','28/02/1986','Santa Elena','10010','Avenida F No.67-89','024856987','0997456321','La libertad'),
+('0986554852','Carla','Barrera','16/07/1983','Santa Elena','07010','Calle G No.78-90','0478863548','0967452314','Santa Elena'),
+('0956842548','Fernando','Gómez','29/11/1991','Santa Elena','24010','Avenida H No.89-12','045568135','0987321567','La libertad');
 
 
 commit;
@@ -72,54 +92,65 @@ select*from paciente;
 
 
 -------TABLAS MEDICO-------
-drop table Medico(
-Codigo_med INT PRIMARY KEY identity (0001,1),
+
+create table Medico(
+ID_medico INT PRIMARY KEY identity (0001,1),
+CodigoMedico varchar(100),
+Cedula varchar(10),
 Nombres varchar(50),
 Apellidos varchar(50),
 Especialidad varchar(100),
 Telefono varchar(10),
-Direccion varchar(100)
+NumCelular varchar(10),
+DireccionDomicilio varchar(100)
 );
 
 
 
-
+delete from Medico
 
 ------INGRESO USUARIO MEDICO----
-insert into  medico (codigo_med,Nombres,Apellidos, Especialidad,Telefono,Direccion )
-values(1500,'Jose','Aguilera','Ginecologo','0946854558','Prosperina'),
-values(1501,'Sofía','López','Cardióloga','0987456321','Prosperina');
-values(1502,'Andrés','García','Pediatra','0987123456','Prosperina');
-values(1503,'María','Paz','Dermatóloga','0998456789','Prosperina'); 
-values(1504,'Carlos','Mora','Oncólogo','0967452314','Prosperina');
-values(1505,'Ana','Salazar','Neuróloga','0987321567','Prosperina');
-values(1506,'Juan','Flores','Endocrinólogo','0997456321','Prosperina');
-values(1507,'Carla','Barrera','Gastroenteróloga','0967452314','Prosperina');
-values(1508,'Fernando','Gómez','Traumatólogo','0987321567','Prosperina');
+insert into  medico (CodigoMedico,Cedula,Nombres,Apellidos, Especialidad,NumCelular,Telefono,DireccionDomicilio )
+values('DCG1500','0948654881','Jose','Aguilera','Ginecologo','0946854558','046958455','Prosperina, la 38 Mz 1 s4'),
+('DCFS501','0984685540','Sofía','López','Cardióloga','0987456321','048469522','Gallegos Lara, El condor Mz 99 s12'),
+('DCR1502','0978458515','Andrés','García','Pediatra','0987123456','045896622','Cristo del Consuelo,Callejon H2 A Mz 87 s66'),
+('DCFS503','0948556488','María','Paz','Dermatóloga','0998456789','043336555','Juan Montalvo,Calle Juan venitez Mz 44 s2'),
+('DCE1504','0948456844','Carlos','Mora','Oncólogo','0967452314','048974555','AV. Ferroviaria,Calle Eloy Alfaro C Mz 10 s13'),
+('DCDF505','0948458666','Ana','Salazar','Neuróloga','0987321567','043364849','9 de Octubre,Calle principal D Mz 12 s6'),
+('DCGT506','1244685488','Juan','Flores','Endocrinólogo','0997456321','047784632','Guasmo sur,Calle principal E Mz 34 sA'),
+('DCR507','0948564855','Carla','Barrera','Gastroenteróloga','0967452314','041246977','Isla trinitaria,Calle principal A Mz 9 s44'),
+('DCX1508','0944485688','Fernando','Gómez','Traumatólogo','0987321567','041112485','Bastion Popular,Bloque 3 A Mz 1 s22');
 commit;
 select*from medico;
 
 
 ---------TABLA CITAS MEDICAS------
 create table Citas_Medicas (
-Codigo_cita  INT PRIMARY KEY identity (0001,1),
+IDCita  INT PRIMARY KEY identity (0001,1),
+CodigoCita varchar(10) not null,
 IDPaciente INT  not null,
-Cod_medico INT not null,
-Num_habitacion INT,
-Fecha varchar(10),
-Hora varchar(10),
-Motivo varchar(10)
-
+IDMedico INT not null,
+IDHorarioCitas INT not null,
+Motivo varchar(200),
+constraint pcientfk FOREIGN KEY (IDPaciente) REFERENCES pacientes(ID_Paciente),
+constraint medicfk FOREIGN KEY (IDMedico) REFERENCES Medico(ID_Medico)
 );
 
-INSERT INTO Pacientes (Codigo_cita,IDPaciente,Cod_medico, Num_habitacion, Fecha, Hora, Motivo) 
+alter table citas_medicas
+add constraint horariocitafk FOREIGN KEY (IDHorarioCitas) REFERENCES HorariosCitas(ID_HORARIO)
+SELECT*FROM pacientes
+SELECT*FROM Medico
+SELECT*FROM Citas_Medicas
+INSERT INTO citas_medicas (CodigoCita ,IDPaciente,IDMedico,IDHorarioCitas,Motivo) 
 VALUES 
-( 1001, 0001, 1500, 5, '10/10/2023', '15:00', 'Me Enferme'),
-( 1002, 0002, 1501, 7, '12/10/2023', '12:00', 'Me Enferme'),
-( 1003, 0003, 1502, 3, '20/10/2023', '11:00', 'Me Enferme'),
-( 1004, 0004, 1503, 2, '25/11/2023', '07:00', 'Me Enferme'),
-( 1005, 0005, 1504, 5, '27/11/2023', '07:00', 'Me Enferme'),
-( 1006, 0006, 1505, 6, '28/11/2023', '10:00', 'Me Enferme'),
+( 'CT124', 17, 19,  1, 'Me Enferme'),
+('CT125', 18, 21,  2, 'Me Enferme MAS');
+
+/*
+( 'CT126', 19, 20, 3, '20/10/2023', '11:00', 'Me Enferme'),
+( 'CT127', 20, 22, 2, '25/11/2023', '07:00', 'Me Enferme'),
+( 'CT128', 21, 19, 5, '27/11/2023', '07:00', 'Me Enferme'),
+( 'CT129', 22, 27, 6, '28/11/2023', '10:00', 'Me Enferme'),*/
 
 ---RESTRINCCION DE DOCTOR UNICO---------
 alter table ingresos add constraint verificacion UNIQUE(identificacion, cod_medico);
@@ -149,51 +180,92 @@ values('2008', '1114768215', 'A123', '108', '16/03/2023', '23');
 select*from Citas_Medicas;
 
 
-create table Horarios(
+create table HorariosCitas(
 ID_HORARIO  INT PRIMARY KEY identity (0001,1),
-Codigo_Cita varchar(4) not null,
-Fecha varchar(4),
-Hora varchar(10),
-Disponibilidad char(1)
+ID_Doctor int,
+Areas int,
+FechaHora datetime,
+Disponibilidad char(1),
+constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
 );
 
+SELECT*FROM HorariosCitas
+
+insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
+values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13:00','S')
+,(22,5,'22/11/23 11:00','S'),(23,3,'18/11/23 10:30','S');
+
+create table Laboratorio
 
 
 create table Areas(
 ID_Areas INT PRIMARY KEY identity (0001,1),
-Codigo_Medico varchar(4) not null,
-Horario varchar(4),
-Hora_Entrada varchar(10),
-Hora_Salida varchar(10),
+ID_Doctor int not null,
+Habitacion varchar(10),
 Disponibilidad char(1)
+constraint MEDICoFK2 FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
 );
-create table Horario_Medicos(
-ID_HorMedico INT PRIMARY KEY identity (0001,1),
-Codigo_Medico varchar(4) not null,
-Area varchar(4),
-Habitacion varchar(10)
 
+SELECT*FROM Areas
+insert into Areas (ID_Doctor ,Habitacion ,Disponibilidad ) 
+values(19,'A12','S'),(20,'A13','S'),(21,'A14','S'),(22,'A15','S'),(23,'A16','S'),(24,'A17','S'),
+(25,'A18','S'),(26,'A19','S'),(27,'A20','S');
+
+
+create table Horario_Medicos(
+ID_HorMedico INT PRIMARY KEY identity (0200,1),
+ID_Doctor int not null,
+Fecha date,
+Hora_Entrada time,
+Hora_Salida time,
+constraint MEDICoFK3 FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
 );
 
 
 
 -- Crear tabla de Historial Medico
 CREATE TABLE Historial_Medico (
-    ID_Historial INT PRIMARY KEY identity (0001,1),
+    ID_Historial INT PRIMARY KEY identity (1200,1),
     ID_Paciente INT,
     ID_Medico INT,
-    Fecha_de_Visita DATE,
-    Sintomas NVARCHAR(255),
-    Diagnostico NVARCHAR(255),
-    Tratamiento NVARCHAR(255),
-    Receta NVARCHAR(255),
-    FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
-    FOREIGN KEY (ID_Medico) REFERENCES Medicos(ID_Medico)
+    FechaVisita int,
+    Sintomas VARCHAR(255),
+    Diagnostico VARCHAR(255),
+    Tratamiento VARCHAR(255),
+    Receta VARCHAR(255),
+   constraint pcientefk FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
+   constraint mediccofk FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
+   constraint Citafk FOREIGN KEY (FechaVisita) REFERENCES Citas_Medicas(IDCita)
 );
+SELECT*FROM Historial_Medico
 -- Ingresar datos en la tabla de Pacientes
-INSERT INTO Pacientes ( Nombre, Apellido, Fecha_de_nacimiento, Genero, Direccion, Numero_telefonico, Correo_electronico) 
+
+SELECT
+    Historial_Medico.Sintomas,
+    Historial_Medico.Diagnostico,
+    Historial_Medico.Tratamiento,
+    Historial_Medico.Receta,
+    pacientes.Apellidos AS APELLIDO_Paciente,
+    Medico.Apellidos AS APELLIDO_Medico,
+	HorariosCitas.FechaHora AS HORARIO
+
+FROM
+    Historial_Medico
+INNER JOIN
+    Pacientes ON Historial_Medico.ID_Paciente = Pacientes.ID_Paciente
+INNER JOIN
+    Medico ON Historial_Medico.ID_Medico = Medico.ID_Medico
+	
+inner join HorariosCitas on HorariosCitas.ID_HORARIO=Historial_Medico.FechaVisita;
+
+SELECT*FROM HorariosCitas
+SELECT*FROM Citas_Medicas
+
+
+
+INSERT INTO Historial_Medico (   ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta) 
 VALUES 
-( 'Juan', 'Pérez', '1980-05-12', 'Masculino', 'Kennedy Norte', '123456789', 'juan.perez@email.com'),
+( 17, 19, 1, 'LE DUELE EL ESTOMAGO', 'DIARREA', 'CUIDADO ESTOMACAL', 'SUERO ORAL');
 ( 'Ana', 'García', '1990-08-15', 'Femenino', 'Urdesa Central', '234567890', 'ana.garcia@email.com'),
 ( 'Carlos', 'Gómez', '1985-12-03', 'Masculino', 'La Alborada', '345678901', 'carlos.gomez@email.com'),
 ( 'María', 'López', '1982-06-25', 'Femenino', 'Los Ceibos', '456789012', 'maria.lopez@email.com'),
@@ -225,23 +297,4 @@ VALUES
 ('Camila', 'Molina', '1995-07-18', 'Femenino', 'Urdesa Central', '012345678', 'camila.molina@email.com');
 
 
-------------CLAVES PRIMARIAS---------------
-alter table paciente
-add constraint paciente_pk primary key(identificacion);
-
-
-
-alter table medico
-add constraint medico_pk primary key(codigo_med);
-
-
-alter table ingresos
-add constraint ingresos_pk primary key (codigo_ingreso);
-
-
--------claves foraneas------------
-alter table ingresos
-add constraint ingresos_fk foreign key(identificacion) references paciente (identificacion);
-alter table ingresos
-add constraint ingresos_fk2 foreign key(cod_medico) references medico (codigo_med);
 

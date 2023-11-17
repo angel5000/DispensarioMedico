@@ -19,7 +19,6 @@ public class Principal {
 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
             String connectURL = "jdbc:sqlserver://" + hostname + ":1433" 
                     + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase+";encrypt=true; trustServerCertificate=true;" +
      "trustStore=storeName;trustStorePassword=storePassword"+ "hostNameInCertificate=hostName";
