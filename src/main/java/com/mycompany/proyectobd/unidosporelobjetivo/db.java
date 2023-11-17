@@ -4,29 +4,32 @@
  */
 package com.mycompany.proyectobd.unidosporelobjetivo;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import java.io.FileNotFoundException;
+
+
 
 /**
  *
  * @author angeldvvp
  */
 public class db {
-      public static void main(String[] args,int a)   throws ClassNotFoundException, SQLException{
-       String hostname = "localhost";
-            String sqlInstanceName = "DESKTOP-BUQ5QOC"; //computer name 
-            String sqlDatabase = "prueba";  //sql server database name
-            String sqlUser = "sa";
-            String sqlPassword = "Angpro500"; //passwrod sa account
+     public static final String DEST = "C:/Users/angeldvvp/Desktop/hola.pdf";
+      public static void main(String[] args) throws FileNotFoundException {
+          try{
+     PdfDocument pdf = new PdfDocument(new PdfWriter(DEST));
+    Document document = new Document(pdf);
+    String line = "Hello! Welcome to iTextPdf";
+    document.add(new Paragraph(line));
+    document.close();
 
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
-            String connectURL = "jdbc:sqlserver://" + hostname + ":1433" 
-                    + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase;
-
-            Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
-            System.out.println("Connect to database successful!!"); 
-    }
-}
+    System.out.println("Awesome PDF just got created.");
+          }catch(Exception e){
+              System.out.println(e.getMessage());
+          }
+      }
+      }
+      
