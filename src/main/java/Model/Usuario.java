@@ -8,7 +8,7 @@ package Model;
  *
  * @author angeldvvp
  */
-public class Usuario {
+public class Usuario  {
     String Nombres="", Apellidos="", Cedula="",
             FechaNacimiento="", Provincia="",Direccion="",Telefono="",NumCelular="",Canton="";
     public  Usuario(){
@@ -29,6 +29,7 @@ public class Usuario {
         this.Canton = Canton;
     }
 
+ 
     public String getNombres() {
         return Nombres;
     }
@@ -36,6 +37,7 @@ public class Usuario {
     public void setNombres(String Nombres) {
         this.Nombres = Nombres;
     }
+
 
     public String getApellidos() {
         return Apellidos;
@@ -45,6 +47,7 @@ public class Usuario {
         this.Apellidos = Apellidos;
     }
 
+  
     public String getCedula() {
         return Cedula;
     }
@@ -52,6 +55,7 @@ public class Usuario {
     public void setCedula(String Cedula) {
         this.Cedula = Cedula;
     }
+
 
     public String getFechaNacimiento() {
         return FechaNacimiento;
@@ -61,6 +65,7 @@ public class Usuario {
         this.FechaNacimiento = FechaNacimiento;
     }
 
+ 
     public String getProvincia() {
         return Provincia;
     }
@@ -68,6 +73,7 @@ public class Usuario {
     public void setProvincia(String Provincia) {
         this.Provincia = Provincia;
     }
+
 
     public String getDireccion() {
         return Direccion;
@@ -77,6 +83,7 @@ public class Usuario {
         this.Direccion = Direccion;
     }
 
+
     public String getTelefono() {
         return Telefono;
     }
@@ -85,6 +92,7 @@ public class Usuario {
         this.Telefono = Telefono;
     }
 
+    
     public String getNumCelular() {
         return NumCelular;
     }
@@ -93,6 +101,7 @@ public class Usuario {
         this.NumCelular = NumCelular;
     }
 
+  
     public String getCanton() {
         return Canton;
     }

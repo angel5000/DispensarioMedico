@@ -4,16 +4,29 @@
  */
 package Visual;
 
+import Control.AdmFactura;
+import Model.Factura;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author angeldvvp
  */
-public class Factura extends javax.swing.JFrame {
+public class FrmFactura extends javax.swing.JFrame {
 
     /**
      * Creates new form Factura
      */
-    public Factura() {
+    public FrmFactura() {
         initComponents();
     }
 
@@ -29,7 +42,7 @@ public class Factura extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btacceptar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -54,7 +67,12 @@ public class Factura extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Aceptar");
+        btacceptar.setText("Aceptar");
+        btacceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btacceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,7 +84,7 @@ public class Factura extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(326, 326, 326)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btacceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -75,7 +93,7 @@ public class Factura extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btacceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
@@ -108,6 +126,78 @@ public class Factura extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void factura(Factura dt){
+    String DEST = "C:/Users/angeldvvp/Desktop/hola.pdf";
+          try{
+     PdfDocument pdf = new PdfDocument(new PdfWriter(DEST));
+    Document document = new Document(pdf);
+    String imagePath = "ruta/a/tu/imagen.jpg";
+
+// Agregar imagen al documento
+
+    String line = "*********Factura********\n";
+     String imageFile = "C:/Users/angeldvvp/Desktop/DispensarioMedico/src/main/Imagenes/medicina.jpg"; 
+ImageData data = ImageDataFactory.create(imageFile);
+Image img = new Image(data); 
+img.setWidth(100);
+img.setHeight(100);
+img.setMarginTop(5);
+document.add(img);
+    document.add(new Paragraph(line+"Dispensario Mata Sano\n"
+    +"Fecha emision: 19/11/2023\n"+"Codigo Factura: "+dt.getCodigoFactura()+"\nNombres y Apellidos del Paciente:"+dt.getNombres()+" "+dt.getApellidos()
+    +"\nCedula: "+dt.getCedula()+"\nEdad: 23"+"\nProvincia: "+dt.getProvincia()+"\nCanton: "+dt.getCanton()+
+            "\nTelefono: "+dt.getTelefono()+"\nNumero Celular: "+dt.getNumCelular()+"\nNombres y Apellidos del Doctor: "+dt.getApellidoDoc()
+    +"\nEspecilidad del medico: "+dt.getEspecialidad()+"\nFecha Visita: 19/11/23 17:00"+"\nMotivo de la cita: "+dt.getMotivos()
+    +"\nCosto: $"+dt.getCosto()+"\nDescuento: %"+dt.getDescuento()+"\nIva: %"+dt.getIva()+
+            "\nSubtotal: %"+dt.getSubtotal()+"\nTotal: $"+dt.getTotal()+"\n**********GRACIAS POR SU VISITA***** "
+    ).setFontSize(12));
+     /* document.add(new Paragraph("Dispensario Mata Sano\n"));
+      document.add(new Paragraph("Fecha emision: 19/11/2023\n"));
+      document.add(new Paragraph("Codigo Factura: "+dt.getCodigoFactura()));
+      document.add(new Paragraph("\nNombres y Apellidos del Paciente:"+dt.getNombres()+" "+dt.getApellidos()));
+      document.add(new Paragraph("\nCedula: "+dt.getCedula()));
+      document.add(new Paragraph("\nEdad: 23"));
+      document.add(new Paragraph("\nProvincia: "+dt.getProvincia()));
+      document.add(new Paragraph("\nCanton: "+dt.getCanton()));
+      document.add(new Paragraph("\nTelefono: "+dt.getTelefono()));
+      document.add(new Paragraph("\nNumero Celular: "+dt.getNumCelular()));
+      document.add(new Paragraph("\nNombres y Apellidos del Doctor: "+dt.getApellidoDoc()));
+      document.add(new Paragraph("\nEspecilidad del medico: "+dt.getEspecialidad()));
+       document.add(new Paragraph("\nFecha Visita: 19/11/23 17:00"));
+       document.add(new Paragraph("\nMotivo de la cita: "+dt.getMotivos()));
+        document.add(new Paragraph("\nCosto: $"+dt.getCosto()));
+        document.add(new Paragraph("\nDescuento: %"+dt.getDescuento()));
+        document.add(new Paragraph("\nIva: %"+dt.getIva()));
+        document.add(new Paragraph("\nSubtotal: %"+dt.getSubtotal()));
+        document.add(new Paragraph("\nTotal: $"+dt.getTotal()));
+        document.add(new Paragraph("\n**********GRACIAS POR SU VISITA***** "));*/
+      
+    document.close();
+
+    System.out.println("Awesome PDF just got created.");
+          }catch(Exception e){
+              System.out.println(e.getMessage());
+          }
+    }
+    
+    private void btacceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btacceptarActionPerformed
+        // TODO add your handling code here:
+       // FrmFactura ft = new FrmFactura();
+        AdmFactura ft = new AdmFactura();
+        try {
+            for(Factura dt : ft.listarClientes("0946584566")){
+                factura(dt);
+                System.out.println("paci: "+dt.getApellidos()+" doc: "+dt.getApellidoDoc()+" "+dt.getCosto());
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmFactura.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        
+        
+    }//GEN-LAST:event_btacceptarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -125,26 +215,27 @@ public class Factura extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Factura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Factura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Factura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Factura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Factura().setVisible(true);
+                new FrmFactura().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btacceptar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

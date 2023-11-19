@@ -11,6 +11,7 @@ package Model;
 public interface DatosFacturacion {
     
    interface DatosPaciente{
+          public String getNombres();
         public String getApellidos();
        
     public String getCedula();
@@ -30,7 +31,12 @@ public interface DatosFacturacion {
       
    }
     
-    
+     interface DatosDoctor {
+        String getApellidosdoc();
+        String getNombresdoc();
+        String getEspecialidad();
+        // Otros métodos para acceder a datos del doctor si es necesario
+    }
     
     
 }
