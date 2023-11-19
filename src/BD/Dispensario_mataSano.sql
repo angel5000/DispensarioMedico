@@ -463,3 +463,36 @@ select*from Citas_Medicas
 select*from CostoServicios
 insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
 values(17,19,1,1,1,0.12,1.8,16.8);
+select*from Medico
+
+SELECT
+pacientes.Nombres,
+   pacientes.Apellidos,
+   pacientes.Cedula,
+   pacientes.Fecha_nacimiento,
+   pacientes.Provincia,
+   pacientes.Direccion,
+   pacientes.canton,
+   pacientes.Telefono,
+   pacientes.NumCelular,
+   Medico.Nombres as NombreDoctor,
+   Medico.Apellidos as ApellidoDoctor,
+   Medico.Especialidad,
+    MotivosCitasMedicas.Servicio as Motivo_de_Cita,
+	CostoServicios.Costos, 
+	CostoServicios.Descuentos,
+	Factura.Iva,
+	Factura.Subtotal,
+	Factura.Total
+FROM
+  Factura
+  inner JOIN
+   pacientes ON pacientes.ID_PACIENTE = Factura.ID_Paciente
+   inner JOIN
+   Medico ON Medico.ID_medico=Factura.ID_Medico
+ inner JOIN
+   MotivosCitasMedicas ON Factura.Motivo = MotivosCitasMedicas.IDMotivo
+ inner JOIN
+  CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
+  WHERE pacientes.Cedula=0946584566;
+	

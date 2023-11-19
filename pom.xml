@@ -46,6 +46,11 @@
     <version>1.6.1</version>
 </dependency>
  
+ <dependency>
+    <groupId>Jtatto</groupId>
+    <artifactId>Jtatto1.6</artifactId>
+    <version>1.6.13</version>
+</dependency>
 <!-- https://mvnrepository.com/artifact/com.sun.pdfview/pdfrenderer -->
 
 
