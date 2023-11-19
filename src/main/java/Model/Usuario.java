@@ -11,12 +11,12 @@ package Model;
 public class Usuario {
     String Nombres="", Apellidos="", Cedula="",
             FechaNacimiento="", Provincia="",Direccion="",Telefono="",NumCelular="",Canton="";
-    public void Usuario(){
+    public  Usuario(){
         
         
     }
     
-    public void Usuario(String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
+    public Usuario(String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
    String Telefono,String NumCelular,String Canton){
           this.Nombres = Nombres;
         this.Apellidos = Apellidos;

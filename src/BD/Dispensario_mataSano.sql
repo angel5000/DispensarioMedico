@@ -136,6 +136,33 @@ constraint pcientfk FOREIGN KEY (IDPaciente) REFERENCES pacientes(ID_Paciente),
 constraint medicfk FOREIGN KEY (IDMedico) REFERENCES Medico(ID_Medico)
 );
 
+create table MotivosCitasMedicas(
+IDMotivo INT PRIMARY KEY identity (0001,1),
+IDMedico INT not null,
+Servicio varchar(150),
+constraint medicfkk2 FOREIGN KEY (IDMedico) REFERENCES Medico(ID_Medico)
+);
+select*from Medico
+
+INSERT INTO MotivosCitasMedicas (IDMedico ,Servicio) 
+VALUES 
+( 19, 'Consulta ginecológica'),
+( 19, 'Pruebas de Papanicolaou (Pap)'),
+( 19, 'Exámenes de mama'),
+( 19, 'Prescripción y gestión de anticonceptivos'),
+( 19, 'Colocación o retiro de dispositivos intrauterinos (DIU)'),
+( 19, 'Exámenes de ITS (infecciones de transmisión sexual'),
+( 19, 'Ultrasonido pélvico');
+
+create table CostoServicios(
+IDCostServi INT PRIMARY KEY identity (001,1),
+IDMCM INT,
+Costos Float,
+Descuentos Float,
+constraint Motivosfk FOREIGN KEY (IDMCM) REFERENCES MotivosCitasMedicas(IDMotivo)
+
+);
+
 alter table citas_medicas
 add constraint horariocitafk FOREIGN KEY (IDHorarioCitas) REFERENCES HorariosCitas(ID_HORARIO)
 SELECT*FROM pacientes
@@ -296,5 +323,18 @@ VALUES
 ( 'Héctor', 'Vera', '1981-04-20', 'Masculino', 'La Garzota', '901234567', 'hector.vera@email.com'),
 ('Camila', 'Molina', '1995-07-18', 'Femenino', 'Urdesa Central', '012345678', 'camila.molina@email.com');
 
+create table Factura(
+ ID_Factura INT PRIMARY KEY identity (1200,1),
+ ID_Paciente INT,
+  ID_Medico INT,
+ ID_Historial INT,
+ Costo float,
+ Subtotal float,
+ Total float,
+ Descuento float
 
+  constraint pcientefk FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
+   constraint mediccofk FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
+   constraint Citafk FOREIGN KEY (FechaVisita) REFERENCES Citas_Medicas(IDCita)
+);
 

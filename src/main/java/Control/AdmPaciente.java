@@ -6,6 +6,7 @@ package Control;
 
 import Model.ConexionBD;
 import Model.Paciente;
+import Model.Factura;
 import java.sql.*;
 
 import java.util.*;
@@ -30,7 +31,6 @@ public class AdmPaciente {
             
             
            
-            
             }catch(SQLException e){
                 e.getStackTrace();
             }

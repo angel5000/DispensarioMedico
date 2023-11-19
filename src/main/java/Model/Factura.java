@@ -1,36 +1,25 @@
 
 package Model;
 
+import Model.DatosFacturacion.DatosPaciente;
+
 /**
  *
  * @author angeldvvp
  */
-public class Factura {
+public class Factura implements DatosPaciente {
     
     String Nombres="", Apellidos="", Cedula="",
             FechaNacimiento="", Provincia="",Direccion="",Telefono="",NumCelular="",Canton="",
             MotivoCita="", Diagnostico="";
     float Subtotal=0, Total=0, Descuento=0,Iva=0;
-    int CodigoPaciente=0;
+    int CodigoFactura=0;
     public Factura(){
         
     }
     
-    public Factura(int CodigoPaciente,String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
-   String Telefono,String NumCelular,String Canton,String MotivoCita,String Diagnostico, float Subtotal, float Total,float Descuento
-    ,float Iva){
-        this.CodigoPaciente= CodigoPaciente;
-        this.Nombres = Nombres;
-        this.Apellidos = Apellidos;
-        this.Cedula = Cedula;
-        this.FechaNacimiento = FechaNacimiento;
-        this.Provincia = Provincia;
-        this.Direccion = Direccion;
-        this.Telefono = Telefono;
-        this.NumCelular = NumCelular;
-        this.Canton = Canton;
-        this.MotivoCita = MotivoCita;
-        this.Diagnostico = Diagnostico;
+    public Factura(int CodigoFactura, float Subtotal, float Total,float Descuento,float Iva){
+        this.CodigoFactura= CodigoFactura;
         this.Subtotal = Subtotal;
         this.Total = Total;
         this.Descuento = Descuento;
@@ -68,6 +57,46 @@ public class Factura {
 
     public void setIva(float Iva) {
         this.Iva = Iva;
+    }
+
+    @Override
+    public String getApellidos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getCedula() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getFechaNacimiento() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getProvincia() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getDireccion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getTelefono() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getNumCelular() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getCanton() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     

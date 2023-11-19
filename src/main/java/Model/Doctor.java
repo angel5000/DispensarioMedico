@@ -8,14 +8,72 @@ package Model;
  *
  * @author angeldvvp
  */
-public class Doctor {
- 
-    public void Doctor(){
+public class Doctor extends Usuario {
+ String Especialidad, Titulacion,  Experiencia;
+ int idDoctor=0;
+ String Usuario="", Contraseña="";
+    public  Doctor(){
         
     }
     
-    public void Doctor(String Especialidad,String Titulacion, String Experiencia, String AñosExp){
+    public  Doctor(int idDoctor,String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
+   String Telefono,String NumCelular,String Canton, String Especialidad,String Titulacion, String Experiencia,String Usuario, String Contraseña){
+        super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton);
         
+        this.Especialidad=Especialidad;
+        this.Titulacion=Titulacion;
+        this.Experiencia=Experiencia;
+         this.Usuario=Usuario;
+        this.Contraseña=Contraseña;
+        
+    }
+
+    public String getEspecialidad() {
+        return Especialidad;
+    }
+
+    public void setEspecialidad(String Especialidad) {
+        this.Especialidad = Especialidad;
+    }
+
+    public String getTitulacion() {
+        return Titulacion;
+    }
+
+    public void setTitulacion(String Titulacion) {
+        this.Titulacion = Titulacion;
+    }
+
+    public String getExperiencia() {
+        return Experiencia;
+    }
+
+    public void setExperiencia(String Experiencia) {
+        this.Experiencia = Experiencia;
+    }
+
+    public int getIdDoctor() {
+        return idDoctor;
+    }
+
+    public void setIdDoctor(int idDoctor) {
+        this.idDoctor = idDoctor;
+    }
+
+    public String getUsuario() {
+        return Usuario;
+    }
+
+    public void setUsuario(String Usuario) {
+        this.Usuario = Usuario;
+    }
+
+    public String getContraseña() {
+        return Contraseña;
+    }
+
+    public void setContraseña(String Contraseña) {
+        this.Contraseña = Contraseña;
     }
     
     
