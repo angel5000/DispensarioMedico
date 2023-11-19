@@ -42,7 +42,7 @@ Rol varchar(50)
 
 insert into Rol(Rol) values('PACIENTE'),('MEDICO');
 
-create table Usuarios(
+create table UsuariosPaciente(
 IDUsuario int PRIMARY KEY identity (100,1),
 ID_DatosUsuario int,
 Usuario varchar(50)unique,
@@ -50,9 +50,26 @@ Contraseña varchar(50),
 Rol int,
 Activa char(1),
 constraint Rolfk FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
-constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE),
-constraint UsuarioMCfk FOREIGN KEY (ID_DatosUsuario) REFERENCES Medico(ID_medico)
+constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE)
+
 );
+create table UsuariosMedicos(
+IDUsuario int PRIMARY KEY identity (100,1),
+ID_DatosMedico int,
+Usuario varchar(50)unique,
+Contraseña varchar(50),
+Rol int,
+Activa char(1),
+constraint Rolfk2 FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
+constraint UsuarioMCfk FOREIGN KEY (ID_DatosMedico) REFERENCES Medico(ID_medico)
+);
+
+select *from pacientes
+select*from Rol
+select*from UsuariosPaciente
+insert into UsuariosPaciente(ID_DatosUsuario,Usuario,Contraseña,Rol,Activa ) 
+values(17,'angel5000','123456',100,'S');
+
 -----------PACIENTES----------
 drop table pacientes
 create table pacientes(
@@ -106,8 +123,8 @@ DireccionDomicilio varchar(100)
 );
 
 
-
-delete from Medico
+select*from Medico
+/*delete from Medico*/
 
 ------INGRESO USUARIO MEDICO----
 insert into  medico (CodigoMedico,Cedula,Nombres,Apellidos, Especialidad,NumCelular,Telefono,DireccionDomicilio )
@@ -120,10 +137,77 @@ values('DCG1500','0948654881','Jose','Aguilera','Ginecologo','0946854558','04695
 ('DCGT506','1244685488','Juan','Flores','Endocrinólogo','0997456321','047784632','Guasmo sur,Calle principal E Mz 34 sA'),
 ('DCR507','0948564855','Carla','Barrera','Gastroenteróloga','0967452314','041246977','Isla trinitaria,Calle principal A Mz 9 s44'),
 ('DCX1508','0944485688','Fernando','Gómez','Traumatólogo','0987321567','041112485','Bastion Popular,Bloque 3 A Mz 1 s22');
+
+INSERT INTO medico (CodigoMedico, Cedula, Nombres, Apellidos, Especialidad, NumCelular, Telefono, DireccionDomicilio)
+VALUES
+  ('DCG1501', '0948654999', 'Laura', 'Martínez', 'Ginecóloga', '0946001122', '046958400', 'Alborada, la 38 Mz 1 s4'),
+  ('DCFS502', '0984005540', 'Martín', 'Gómez', 'Cardiólogo', '0987000000', '048448569', 'Garzota, El condor Mz 99 s12'),
+  ('DCR1503', '0948633299', 'Isabel', 'García', 'Pediatra', '0987000001', '0456984552', 'Urb. Kennedy, Callejon H2 A Mz 87 s66'),
+  ('DCFS504', '0948111222', 'Carlos', 'Ruiz', 'Dermatólogo', '0998000000', '043311144', 'Alborada, Calle Juan venitez Mz 44 s2'),
+  ('DCE1505', '0946846985', 'Elena', 'Mora', 'Oncóloga', '0967000000', '047895632', 'AV. Olmedo, Calle Eloy Alfaro C Mz 10 s13'),
+  ('DCDF506', '0945684587', 'Santiago', 'Salazar', 'Neurólogo', '0987000002', '04356845', 'Alborada, Calle principal D Mz 12 s6'),
+  ('DCGT507', '1216988745', 'Diana', 'Flores', 'Endocrinóloga', '0998000001', '047123654', 'Urb. Kennedy, Calle principal E Mz 34 sA'),
+  ('DCR508', '0986987455', 'Pedro', 'Barrera', 'Gastroenterólogo', '0967000001', '041223695', 'Alborada, Calle principal A Mz 9 s44'),
+  ('DCX1509', '0913666840', 'Gabriela', 'Gómez', 'Traumatóloga', '0987000002', '041489874', 'AV. Olmedo, Bloque 3 A Mz 1 s22');
+
+
+  INSERT INTO medico (CodigoMedico, Cedula, Nombres, Apellidos, Especialidad, NumCelular, Telefono, DireccionDomicilio)
+VALUES
+  -- Ginecólogos
+  ('DCG1501', '0968654999', 'Laura', 'Martínez', 'Ginecóloga', '0946001122', '046958400', 'Alborada, la 38 Mz 1 s4'),
+  ('DCG1502', '0948654881', 'Jose', 'Aguilera', 'Ginecólogo', '0946854558', '046958455', 'Prosperina, la 38 Mz 1 s4'),
+  ('DCG1503', '0978663599', 'Gabriela', 'Ramírez', 'Ginecóloga', '0999697111', '043548966', 'Sauces, Calle principal G Mz 5 s19'),
+
+  -- Cardiólogos
+  ('DCFS502', '0984005540', 'Martín', 'Gómez', 'Cardiólogo', '0987468566', '044685966', 'Garzota, El condor Mz 99 s12'),
+  ('DCFS503', '0948556488', 'María', 'Paz', 'Cardióloga', '0998456789', '043336555', 'Juan Montalvo, Calle Juan venitez Mz 44 s2'),
+  ('DCFS504', '0996364486', 'Carlos', 'Ruiz', 'Cardiólogo', '0998987458', '043311148', 'Alborada, Calle Juan venitez Mz 44 s2'),
+
+  -- Pediatras
+  ('DCR1502', '0978458515', 'Andrés', 'García', 'Pediatra', '0987123456', '045896622', 'Cristo del Consuelo, Callejon H2 A Mz 87 s66'),
+  ('DCR1503', '0978000000', 'Isabel', 'García', 'Pediatra', '0987135221', '049684477', 'Urb. Kennedy, Callejon H2 A Mz 87 s66'),
+  ('DCR1504', '0948456844', 'Carlos', 'Mora', 'Pediatra', '0967452314', '048974555', 'AV. Ferroviaria, Calle Eloy Alfaro C Mz 10 s13'),
+
+  -- Dermatólogos
+  ('DCFS504', '0948453222', 'Carlos', 'Ruiz', 'Dermatólogo', '0998984666', '043313189', 'Alborada, Calle Juan venitez Mz 44 s2'),
+  ('DCFS503', '0948512488', 'María', 'Paz', 'Dermatóloga', '0998456789', '049485555', 'Juan Montalvo, Calle Juan venitez Mz 44 s2'),
+  ('DCFS505', '0948369777', 'Raúl', 'Fernández', 'Dermatólogo', '0988111222', '049684555', 'Samborondón, Calle principal D Mz 8 s32'),
+
+  -- Oncólogos
+  ('DCE1504', '0948456844', 'Carlos', 'Mora', 'Oncólogo', '0967452314', '048974555', 'AV. Ferroviaria, Calle Eloy Alfaro C Mz 10 s13'),
+  ('DCE1505', '0948456333', 'Elena', 'Mora', 'Oncóloga', '0967631485', '048964788', 'AV. Olmedo, Calle Eloy Alfaro C Mz 10 s13'),
+  ('DCE1506', '0948639888', 'Juan', 'Cruz', 'Oncólogo', '0998487664', '044685555', 'Urdesa, Calle principal E Mz 30 s14'),
+
+  -- Neurólogos
+  ('DCDF505', '0988458666', 'Ana', 'Salazar', 'Neuróloga', '0987321567', '043364849', '9 de Octubre, Calle principal D Mz 12 s6'),
+  ('DCDF506', '0958125444', 'Santiago', 'Salazar', 'Neurólogo', '0987139582', '043322200', 'Alborada, Calle principal D Mz 12 s6'),
+  ('DCDF507', '0968788999', 'Eva', 'Gómez', 'Neuróloga', '0968698744', '049684586', 'Ceibos, Calle principal F Mz 15 s9'),
+
+  -- Endocrinólogos
+  ('DCGT506', '0984685488', 'Juan', 'Flores', 'Endocrinólogo', '0997456321', '047784632', 'Guasmo sur, Calle principal E Mz 34 sA'),
+  ('DCGT507', '0948564855', 'Carla', 'Barrera', 'Endocrinóloga', '0967452314', '041246977', 'Isla trinitaria, Calle principal A Mz 9 s44'),
+  ('DCGT508', '0948112000', 'Andrea', 'Gómez', 'Endocrinóloga', '0998111333', '043948777', 'Samanes, Calle principal G Mz 7 s20'),
+
+  -- Gastroenterólogos
+  ('DCR507', '0948564855', 'Carla', 'Barrera', 'Gastroenteróloga', '0967452314', '041246977', 'Isla trinitaria, Calle principal A Mz 9 s44'),
+  ('DCR508', '0948123555', 'Pedro', 'Barrera', 'Gastroenterólogo', '0967964851', '046987777', 'Alborada, Calle principal A Mz 9 s44'),
+  ('DCR509', '0948136988', 'Mónica', 'López', 'Gastroenteróloga', '0998111666', '041211122', 'Ceibos, Calle principal G Mz 11 s15'),
+
+  -- Traumatólogos
+  ('DCX1508', '0944485688', 'Fernando', 'Gómez', 'Traumatólogo', '0987321567', '041112485', 'Bastión Popular, Bloque 3 A');
+
+
+
+
+
+
+
+
+
 commit;
 select*from medico;
 
-
+select*from Citas_Medicas
 ---------TABLA CITAS MEDICAS------
 create table Citas_Medicas (
 IDCita  INT PRIMARY KEY identity (0001,1),
@@ -131,10 +215,35 @@ CodigoCita varchar(10) not null,
 IDPaciente INT  not null,
 IDMedico INT not null,
 IDHorarioCitas INT not null,
-Motivo varchar(200),
+Motivo int,
 constraint pcientfk FOREIGN KEY (IDPaciente) REFERENCES pacientes(ID_Paciente),
 constraint medicfk FOREIGN KEY (IDMedico) REFERENCES Medico(ID_Medico)
+constraint motivfk FOREIGN KEY (Motivo) REFERENCES MotivosCitasMedicas(IDMotivo)
 );
+select*from MotivosCitasMedicas
+
+alter table Citas_Medicas add  Motivo int
+update Citas_Medicas set Motivo=2 where IDCita=2
+SELECT
+   pacientes.Apellidos,
+   Medico.Apellidos,
+   Medico.Especialidad,
+    MotivosCitasMedicas.Servicio,
+	CostoServicios.Costos, 
+	CostoServicios.Descuentos
+
+FROM
+   Citas_Medicas 
+  inner JOIN
+   pacientes ON pacientes.ID_PACIENTE = Citas_Medicas.IDPaciente
+   inner JOIN
+   Medico ON Medico.ID_medico=Citas_Medicas.IDMedico
+ inner JOIN
+   MotivosCitasMedicas ON Citas_Medicas.Motivo = MotivosCitasMedicas.IDMotivo
+ inner JOIN
+    CostoServicios ON CostoServicios.IDMCM = MotivosCitasMedicas.IDMotivo
+
+
 
 create table MotivosCitasMedicas(
 IDMotivo INT PRIMARY KEY identity (0001,1),
@@ -142,17 +251,26 @@ IDMedico INT not null,
 Servicio varchar(150),
 constraint medicfkk2 FOREIGN KEY (IDMedico) REFERENCES Medico(ID_Medico)
 );
-select*from Medico
+select*from Medico where Especialidad='Ginecólogo'
+select*from MotivosCitasMedicas
+INSERT INTO MotivosCitasMedicas (IDMedico ,Servicio) 
+VALUES 
+( 53, ' Consulta ginecológica'),
+( 53, ' Pruebas de Papanicolaou (Pap) '),
+( 53, 'Exámenes de mama '),
+( 53, 'Prescripción y gestión de anticonceptivos '),
+( 53, 'Colocación o retiro de dispositivos intrauterinos (DIU)'),
+( 53, 'Exámenes de ITS (infecciones de transmisión sexual'),
+( 53, 'Ultrasonido pélvico');
 
 INSERT INTO MotivosCitasMedicas (IDMedico ,Servicio) 
 VALUES 
-( 19, 'Consulta ginecológica'),
-( 19, 'Pruebas de Papanicolaou (Pap)'),
-( 19, 'Exámenes de mama'),
-( 19, 'Prescripción y gestión de anticonceptivos'),
-( 19, 'Colocación o retiro de dispositivos intrauterinos (DIU)'),
-( 19, 'Exámenes de ITS (infecciones de transmisión sexual'),
-( 19, 'Ultrasonido pélvico');
+( 24, 'Consulta neurológica'),
+( 24, 'Electroencefalograma (EEG)'),
+( 24, 'Tomografía computarizada (TC) y resonancia magnética (RM)'),
+( 24, 'Tratamiento de la epilepsia'),
+( 24, 'Tratamiento de dolores de cabeza y migrañas');
+
 
 create table CostoServicios(
 IDCostServi INT PRIMARY KEY identity (001,1),
@@ -162,6 +280,16 @@ Descuentos Float,
 constraint Motivosfk FOREIGN KEY (IDMCM) REFERENCES MotivosCitasMedicas(IDMotivo)
 
 );
+select*from CostoServicios
+INSERT INTO CostoServicios (IDMCM  ,Costos,Descuentos) 
+VALUES 
+( 1,15.00,0 ),
+( 2,35.00,0 ),
+( 3,20.50,0.05 ),
+( 4,70.35,0 ),
+( 5,30.00,0 ),
+( 6,15.00,0.1 ),
+( 7,48.20,0.07 );
 
 alter table citas_medicas
 add constraint horariocitafk FOREIGN KEY (IDHorarioCitas) REFERENCES HorariosCitas(ID_HORARIO)
@@ -179,30 +307,12 @@ VALUES
 ( 'CT128', 21, 19, 5, '27/11/2023', '07:00', 'Me Enferme'),
 ( 'CT129', 22, 27, 6, '28/11/2023', '10:00', 'Me Enferme'),*/
 
----RESTRINCCION DE DOCTOR UNICO---------
-alter table ingresos add constraint verificacion UNIQUE(identificacion, cod_medico);
+
+
 
 
 -----------DATOS CITAS MEDICAS-------------
 
-insert into  ingresos (codigo_ingreso,identificacion,cod_medico,num_cam, fecha_ingreso,num_habitacion )
-values('2000','0946584566','A123','100','09/03/2023','15');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2001', '1718593209', 'A123', '101', '09/03/2023', '16');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2002', '0914761293', 'B456', '102', '10/03/2023', '17');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2003', '1301876512', 'A123', '103', '11/03/2023', '18');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2004', '1718645203', 'C789', '104', '12/03/2023', '19');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2005', '0913758294', 'B456', '105', '13/03/2023', '20');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2006', '1314768295', 'C789', '106', '14/03/2023', '21');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2007', '1314968210', 'B456', '107', '15/03/2023', '22');
-insert into ingresos (codigo_ingreso, identificacion, cod_medico, num_cam, fecha_ingreso, num_habitacion) 
-values('2008', '1114768215', 'A123', '108', '16/03/2023', '23');
 
 select*from Citas_Medicas;
 
@@ -217,12 +327,17 @@ constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
 );
 
 SELECT*FROM HorariosCitas
-
+select*from Medico
 insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
 values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13:00','S')
 ,(22,5,'22/11/23 11:00','S'),(23,3,'18/11/23 10:30','S');
 
-create table Laboratorio
+insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
+values(24,1,'20/11/23 07:30','S'),(24,1,'20/11/23 16:30','S')
+,(24,1,'12/11/23 16:30','S'),
+(25,2,'15/11/23 11:30','S'),(26,4,'19/11/23 13:00','S')
+,(27,5,'22/11/23 11:00','S');
+
 
 
 create table Areas(
@@ -322,19 +437,29 @@ VALUES
 ('Marcela', 'Calderón', '1986-02-05', 'Femenino', 'Urdesa', '890123456', 'marcela.calderon@email.com'),
 ( 'Héctor', 'Vera', '1981-04-20', 'Masculino', 'La Garzota', '901234567', 'hector.vera@email.com'),
 ('Camila', 'Molina', '1995-07-18', 'Femenino', 'Urdesa Central', '012345678', 'camila.molina@email.com');
+select*from factura
 
 create table Factura(
  ID_Factura INT PRIMARY KEY identity (1200,1),
  ID_Paciente INT,
-  ID_Medico INT,
- ID_Historial INT,
- Costo float,
+ ID_Medico INT,
+FechaVisita INT,
+Motivo int,
+ Costo int,
+ Iva int ,
  Subtotal float,
  Total float,
- Descuento float
-
-  constraint pcientefk FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
-   constraint mediccofk FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
-   constraint Citafk FOREIGN KEY (FechaVisita) REFERENCES Citas_Medicas(IDCita)
+ constraint pcientefk2 FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
+ constraint mediccofk2 FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
+ constraint Citafk2 FOREIGN KEY (FechaVisita) REFERENCES HorariosCitas(ID_HORARIO),
+ constraint Motivofk FOREIGN KEY (motivo) REFERENCES MotivosCitasMedicas(IDMotivo),
+ constraint Costofk FOREIGN KEY (Costo) REFERENCES CostoServicios(IDCostServi)
 );
-
+delete from Factura
+alter table factura add Iva float
+select *from Factura
+select*from HorariosCitas
+select*from Citas_Medicas
+select*from CostoServicios
+insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
+values(17,19,1,1,1,0.12,1.8,16.8);
