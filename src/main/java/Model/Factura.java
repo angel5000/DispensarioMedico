@@ -1,7 +1,6 @@
 
 package Model;
 
-import Model.DatosFacturacion.DatosPaciente;
 
 /**
  *

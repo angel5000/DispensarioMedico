@@ -13,10 +13,12 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author angeldvvp
@@ -26,8 +28,10 @@ public class FrmFactura extends javax.swing.JFrame {
     /**
      * Creates new form Factura
      */
+    
     public FrmFactura() {
         initComponents();
+        TBfactura();
     }
 
     /**
@@ -41,17 +45,17 @@ public class FrmFactura extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbfac = new javax.swing.JTable();
         btacceptar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
-        setType(java.awt.Window.Type.POPUP);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalles Factura"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbfac.setFont(new java.awt.Font("Perpetua", 0, 18)); // NOI18N
+        tbfac.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -62,12 +66,26 @@ public class FrmFactura extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Byte.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbfac);
+        if (tbfac.getColumnModel().getColumnCount() > 0) {
+            tbfac.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tbfac.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tbfac.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tbfac.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tbfac.getColumnModel().getColumn(5).setPreferredWidth(30);
+        }
 
         btacceptar.setText("Aceptar");
         btacceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +100,7 @@ public class FrmFactura extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(326, 326, 326)
@@ -128,6 +146,31 @@ public class FrmFactura extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void TBfactura(){
+        DefaultTableModel TB = (DefaultTableModel)  tbfac.getModel();
+       TB.setRowCount(0);
+        AdmFactura aft = new AdmFactura();
+        try {
+            for(Factura ft :aft.listarFacturas("0946584566")){
+                TB.addRow(new Object[]{ft.getCodigoFactura(),ft.getNombres()+" "+ft.getApellidos(),ft.getMotivos(),
+                    ft.getSubtotal(),ft.getTotal()});
+                int tamaño = tamañofila( tbfac.getFont());
+       tbfac.setRowHeight(tamaño);
+
+            }
+           TB.fireTableDataChanged();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmFactura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    private int tamañofila(Font font) {
+        
+        int incrementa = 6;
+        return font.getSize() + incrementa;
+    }
+    
     public void factura(Factura dt){
     String DEST = "C:/Users/angeldvvp/Desktop/hola.pdf";
           try{
@@ -187,7 +230,7 @@ document.add(img);
        // FrmFactura ft = new FrmFactura();
         AdmFactura ft = new AdmFactura();
         try {
-            for(Factura dt : ft.listarClientes("0946584566")){
+            for(Factura dt : ft.listarFacturas("0946584566")){
                 factura(dt);
                 System.out.println("paci: "+dt.getApellidos()+" doc: "+dt.getApellidoDoc()+" "+dt.getCosto());
             }
@@ -241,6 +284,6 @@ document.add(img);
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbfac;
     // End of variables declaration//GEN-END:variables
 }

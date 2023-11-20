@@ -22,7 +22,7 @@ import java.util.List;
 public class AdmFactura {
     
       
-     public List<Factura> listarClientes(String cedulaPaciente) throws SQLException {
+     public List<Factura> listarFacturas(String cedulaPaciente) throws SQLException {
        List<Factura> factura = new ArrayList<>();
         String query = "{CALL FacturaPaciente(?)}";
 //cambiar consulta segun el modo a mostrar
