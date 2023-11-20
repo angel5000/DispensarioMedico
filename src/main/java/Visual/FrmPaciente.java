@@ -84,6 +84,8 @@ public class FrmPaciente extends javax.swing.JFrame {
         datenc = new com.toedter.calendar.JDateChooser();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtpanedir = new javax.swing.JTextPane();
+        jLabel16 = new javax.swing.JLabel();
+        CBprovincias1 = new javax.swing.JComboBox<>();
         jp2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -188,6 +190,19 @@ public class FrmPaciente extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(txtpanedir);
 
+        jLabel16.setText("Genero:");
+
+        CBprovincias1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CBprovincias1ItemStateChanged(evt);
+            }
+        });
+        CBprovincias1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CBprovincias1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -203,19 +218,26 @@ public class FrmPaciente extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtcedula, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(128, 128, 128)
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txttelef, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtnomb, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(34, 34, 34)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtnumcel, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtnomb, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(jLabel11))
+                                    .addComponent(jLabel16))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(CBprovincias1, 0, 142, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtnumcel)
+                                        .addGap(6, 6, 6))))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +263,7 @@ public class FrmPaciente extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtape, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(372, 593, Short.MAX_VALUE))
+                .addGap(405, 579, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,7 +283,9 @@ public class FrmPaciente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addComponent(CBprovincias1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -386,7 +410,7 @@ public class FrmPaciente extends javax.swing.JFrame {
                             .addGroup(jp2Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel24)
-                                .addContainerGap(593, Short.MAX_VALUE))
+                                .addContainerGap(594, Short.MAX_VALUE))
                             .addGroup(jp2Layout.createSequentialGroup()
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -742,6 +766,14 @@ public class FrmPaciente extends javax.swing.JFrame {
      JOptionPane.showMessageDialog(null, "Si no desea especificar un motivo especifico se ingresara como un agendado general o consulta/visita comun");
     }//GEN-LAST:event_btmotvActionPerformed
 
+    private void CBprovincias1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CBprovincias1ItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CBprovincias1ItemStateChanged
+
+    private void CBprovincias1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBprovincias1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CBprovincias1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -780,6 +812,7 @@ public class FrmPaciente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CBCantones;
     private javax.swing.JComboBox<String> CBprovincias;
+    private javax.swing.JComboBox<String> CBprovincias1;
     private javax.swing.JTable TBHorarios;
     private javax.swing.JButton btfacturas;
     private javax.swing.JButton bthistorial;
@@ -804,6 +837,7 @@ public class FrmPaciente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
