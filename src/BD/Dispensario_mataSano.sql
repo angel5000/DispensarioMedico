@@ -494,4 +494,26 @@ FROM
  inner JOIN
   CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
   WHERE pacientes.Cedula=0946584566;
-	
+
+	create table MetodoPago(
+	ID_MetPago INT PRIMARY KEY identity (0300,1),
+	Metodo varchar(60)
+	);
+	insert into MetodoPago (Metodo) 
+	values('Tarjeta de Debito'),
+	('PayPal'),
+	('Transferencia Bancaria'),
+   ('Tarjeta de Credito');
+   select*from MetodoPago
+	create table PagosRealizados(
+	ID_MetPago INT PRIMARY KEY identity (4000,1),
+	IdPaciente int,
+	idMotivo int,
+	idMetodoPago int ,
+	 constraint pcintefk2 FOREIGN KEY (IdPaciente) REFERENCES Pacientes(ID_Paciente),
+  constraint Motiofk FOREIGN KEY (idMotivo) REFERENCES MotivosCitasMedicas(IDMotivo),
+  constraint Metodopg FOREIGN KEY (idMetodoPago) REFERENCES MetodoPago(ID_MetPago)
+	);
+	insert into PagosRealizados (IdPaciente,idMotivo,idMetodoPago)
+values(37,71,300);
+select*from PagosRealizados
