@@ -39,19 +39,69 @@ IDRol int PRIMARY KEY identity (100,1),
 Rol varchar(50)
 
 );
-
+select *from Rol
 insert into Rol(Rol) values('PACIENTE'),('MEDICO');
 
 create table UsuariosPaciente(
 IDUsuario int PRIMARY KEY identity (100,1),
 ID_DatosUsuario int,
 Usuario varchar(50)unique,
-Contraseña varchar(50),
 Rol int,
 Activa char(1),
+ Salt VARBINARY(32) NOT NULL,
+ HashedContrasena VARBINARY(64) NOT NULL,
 constraint Rolfk FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
 constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE)
 );
+
+select *from UsuariosPaciente
+delete from UsuariosPaciente
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+INSERT INTO UsuariosPaciente (ID_DatosUsuario, Usuario, Salt, HashedContrasena)
+VALUES (37, 'Ang5000', @Salt, HASHBYTES('SHA2_512', @Salt + CAST('Angel123456' AS NVARCHAR(MAX))));
+
+
+
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = 'Angel123456';
+
+INSERT INTO UsuariosPaciente (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUES (
+    37,
+    'Ang5000',100,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
+);
+
+
+
+
+/*--------------------------------*/
+DECLARE @Salt  VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+DECLARE @InputPassword NVARCHAR(MAX);
+SET @InputPassword = 'Angel123456'; 
+
+DECLARE @StoredHashedPassword VARBINARY(64);
+SELECT @StoredHashedPassword = HashedContrasena
+FROM UsuariosPaciente
+WHERE Usuario = 'Ang5000';
+
+DECLARE @InputHashedPassword VARBINARY(64);
+SET @InputHashedPassword = HASHBYTES('SHA2_512', @Salt + CAST(@InputPassword AS NVARCHAR(MAX)));
+
+IF @InputHashedPassword = @StoredHashedPassword
+    PRINT 'Contraseña válida';
+ELSE
+    PRINT 'Contraseña inválida';
+
+
+
+
 
 create table UsuariosMedicos(
 IDUsuario int PRIMARY KEY identity (100,1),
