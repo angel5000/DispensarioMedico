@@ -5,6 +5,7 @@
 package Visual;
 
 import Control.AdmFactura;
+import Control.Excepciones;
 import Model.Factura;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -13,12 +14,26 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 /**
  *
  * @author angeldvvp
@@ -28,10 +43,22 @@ public class FrmFactura extends javax.swing.JFrame {
     /**
      * Creates new form Factura
      */
-    
-    public FrmFactura() {
+    int idpaci=0;
+    public FrmFactura(int idpaciente) throws Excepciones, SQLException {
         initComponents();
+        idpaci=idpaciente;
         TBfactura();
+         DefaultTableModel TB = (DefaultTableModel)  tbfac.getModel();
+          TableColumnModel columnModel = tbfac.getColumnModel();
+   TableColumn agregarColumn;
+agregarColumn = tbfac.getColumnModel().getColumn(5);
+agregarColumn.setCellEditor(new myeditor(tbfac));
+agregarColumn.setCellRenderer(new myrenderer(true));
+        
+    }
+
+    private FrmFactura() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -145,23 +172,91 @@ public class FrmFactura extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    public class myrenderer extends JLabel implements TableCellRenderer {
 
-    public void TBfactura(){
+    boolean isBordered = true;
+
+    public myrenderer(boolean isBordered) {
+        this.isBordered = isBordered;
+        setOpaque(true);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
+        // Va a mostrar el botón solo en la última fila.
+        // de otra forma muestra un espacio en blanco.
+        if (row == table.getModel().getRowCount() - 1) {
+            return new JButton("Descargar");
+        } else {
+            setBackground(new Color(0xffffff));
+            return this;
+        }
+    }
+}
+    public class myeditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+
+    Boolean currentValue;
+    JButton button;
+    protected static final String EDIT = "edit";
+    private JTable jTable1;
+
+    public myeditor(JTable jTable1) {
+        button = new JButton();
+        button.setActionCommand(EDIT);
+        button.addActionListener(this);
+        button.setBorderPainted(false);
+        this.jTable1 = jTable1;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // mymodel t = (mymodel) jTable1.getModel();
+        // t.addNewRecord();
+        JOptionPane.showMessageDialog(null, "SE HA CREADO UNA COPIA DE SU FACTURA");
+        
+        fireEditingStopped();
+    }
+
+    //Implement the one CellEditor method that AbstractCellEditor doesn't.
+    @Override
+    public Object getCellEditorValue() {
+        return currentValue;
+    }
+
+    //Implement the one method defined by TableCellEditor.
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        // Va a mostrar el botón solo en la última fila.
+        // de otra forma muestra un espacio en blanco.
+        if (row == table.getModel().getRowCount() - 1) {
+            currentValue = (Boolean) value;
+            return button;
+        }
+        return new JLabel();
+    }
+}
+     
+    
+    
+    public void TBfactura()throws  Excepciones,SQLException{
         DefaultTableModel TB = (DefaultTableModel)  tbfac.getModel();
        TB.setRowCount(0);
         AdmFactura aft = new AdmFactura();
         try {
-            for(Factura ft :aft.listarFacturas("0946584566")){
+            for(Factura ft :aft.listarFacturas(idpaci)){
                 TB.addRow(new Object[]{ft.getCodigoFactura(),ft.getNombres()+" "+ft.getApellidos(),ft.getMotivos(),
                     ft.getSubtotal(),ft.getTotal()});
                 int tamaño = tamañofila( tbfac.getFont());
        tbfac.setRowHeight(tamaño);
-
+      TB.fireTableDataChanged();
             }
-           TB.fireTableDataChanged();
+          
 
         } catch (SQLException ex) {
             Logger.getLogger(FrmFactura.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Excepciones ex) {
+            JOptionPane.showMessageDialog(null, "SIN FACTURAS");
+            System.out.println("SIN FACTURAS");
         }
         
     }
@@ -171,74 +266,12 @@ public class FrmFactura extends javax.swing.JFrame {
         return font.getSize() + incrementa;
     }
     
-    public void factura(Factura dt){
-    String DEST = "C:/Users/angeldvvp/Desktop/hola.pdf";
-          try{
-     PdfDocument pdf = new PdfDocument(new PdfWriter(DEST));
-    Document document = new Document(pdf);
-    String imagePath = "ruta/a/tu/imagen.jpg";
-
-// Agregar imagen al documento
-
-    String line = "*********Factura********\n";
-     String imageFile = "C:/Users/angeldvvp/Desktop/DispensarioMedico/src/main/Imagenes/medicina.jpg"; 
-ImageData data = ImageDataFactory.create(imageFile);
-Image img = new Image(data); 
-img.setWidth(100);
-img.setHeight(100);
-img.setMarginTop(5);
-document.add(img);
-    document.add(new Paragraph(line+"Dispensario Mata Sano\n"
-    +"Fecha emision: 19/11/2023\n"+"Codigo Factura: "+dt.getCodigoFactura()+"\nNombres y Apellidos del Paciente:"+dt.getNombres()+" "+dt.getApellidos()
-    +"\nCedula: "+dt.getCedula()+"\nEdad: 23"+"\nProvincia: "+dt.getProvincia()+"\nCanton: "+dt.getCanton()+
-            "\nTelefono: "+dt.getTelefono()+"\nNumero Celular: "+dt.getNumCelular()+"\nNombres y Apellidos del Doctor: "+dt.getApellidoDoc()
-    +"\nEspecilidad del medico: "+dt.getEspecialidad()+"\nFecha Visita: 19/11/23 17:00"+"\nMotivo de la cita: "+dt.getMotivos()
-    +"\nCosto: $"+dt.getCosto()+"\nDescuento: %"+dt.getDescuento()+"\nIva: %"+dt.getIva()+
-            "\nSubtotal: %"+dt.getSubtotal()+"\nTotal: $"+dt.getTotal()+"\n**********GRACIAS POR SU VISITA***** "
-    ).setFontSize(12));
-     /* document.add(new Paragraph("Dispensario Mata Sano\n"));
-      document.add(new Paragraph("Fecha emision: 19/11/2023\n"));
-      document.add(new Paragraph("Codigo Factura: "+dt.getCodigoFactura()));
-      document.add(new Paragraph("\nNombres y Apellidos del Paciente:"+dt.getNombres()+" "+dt.getApellidos()));
-      document.add(new Paragraph("\nCedula: "+dt.getCedula()));
-      document.add(new Paragraph("\nEdad: 23"));
-      document.add(new Paragraph("\nProvincia: "+dt.getProvincia()));
-      document.add(new Paragraph("\nCanton: "+dt.getCanton()));
-      document.add(new Paragraph("\nTelefono: "+dt.getTelefono()));
-      document.add(new Paragraph("\nNumero Celular: "+dt.getNumCelular()));
-      document.add(new Paragraph("\nNombres y Apellidos del Doctor: "+dt.getApellidoDoc()));
-      document.add(new Paragraph("\nEspecilidad del medico: "+dt.getEspecialidad()));
-       document.add(new Paragraph("\nFecha Visita: 19/11/23 17:00"));
-       document.add(new Paragraph("\nMotivo de la cita: "+dt.getMotivos()));
-        document.add(new Paragraph("\nCosto: $"+dt.getCosto()));
-        document.add(new Paragraph("\nDescuento: %"+dt.getDescuento()));
-        document.add(new Paragraph("\nIva: %"+dt.getIva()));
-        document.add(new Paragraph("\nSubtotal: %"+dt.getSubtotal()));
-        document.add(new Paragraph("\nTotal: $"+dt.getTotal()));
-        document.add(new Paragraph("\n**********GRACIAS POR SU VISITA***** "));*/
-      
-    document.close();
-
-    System.out.println("Awesome PDF just got created.");
-          }catch(Exception e){
-              System.out.println(e.getMessage());
-          }
-    }
+       
+        
+        
     
     private void btacceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btacceptarActionPerformed
-        // TODO add your handling code here:
-       // FrmFactura ft = new FrmFactura();
-        AdmFactura ft = new AdmFactura();
-        try {
-            for(Factura dt : ft.listarFacturas("0946584566")){
-                factura(dt);
-                System.out.println("paci: "+dt.getApellidos()+" doc: "+dt.getApellidoDoc()+" "+dt.getCosto());
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmFactura.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
-        }
+        
         
         
     }//GEN-LAST:event_btacceptarActionPerformed

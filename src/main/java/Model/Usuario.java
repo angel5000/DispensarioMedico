@@ -10,14 +10,15 @@ package Model;
  */
 public class Usuario  {
     String Nombres="", Apellidos="", Cedula="",
-            FechaNacimiento="", Provincia="",Direccion="",Telefono="",NumCelular="",Canton="";
+            FechaNacimiento="", Provincia="",Direccion="",Telefono="",NumCelular="",Canton="",CorreoElectronico="";
+    char genero=' ';
     public  Usuario(){
         
         
     }
     
     public Usuario(String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
-   String Telefono,String NumCelular,String Canton){
+   String Telefono,String NumCelular,String Canton, char Genero,String CorreoElectronico){
           this.Nombres = Nombres;
         this.Apellidos = Apellidos;
         this.Cedula = Cedula;
@@ -27,6 +28,8 @@ public class Usuario  {
         this.Telefono = Telefono;
         this.NumCelular = NumCelular;
         this.Canton = Canton;
+        this.genero=Genero;
+        this.CorreoElectronico=CorreoElectronico;
     }
 
  
@@ -63,6 +66,22 @@ public class Usuario  {
 
     public void setFechaNacimiento(String FechaNacimiento) {
         this.FechaNacimiento = FechaNacimiento;
+    }
+
+    public String getCorreoElectronico() {
+        return CorreoElectronico;
+    }
+
+    public void setCorreoElectronico(String CorreoElectronico) {
+        this.CorreoElectronico = CorreoElectronico;
+    }
+
+    public char getGenero() {
+        return genero;
+    }
+
+    public void setGenero(char genero) {
+        this.genero = genero;
     }
 
  

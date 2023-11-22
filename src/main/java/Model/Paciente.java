@@ -18,8 +18,9 @@ public class Paciente extends Usuario {
             }
     
     public Paciente(int idPaciente,String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
-   String Telefono,String NumCelular,String Canton, int idHistorialMedico, String Usuario, String Contraseña){
-       super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton);
+   String Telefono,String NumCelular,String Canton, char Genero,String CorreoElectronico,int idHistorialMedico, String Usuario, String Contraseña){
+       super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton
+       , Genero,CorreoElectronico);
         this.idPaciente=idPaciente;
         this.idHisotiralmedico=idHistorialMedico;
         //this.idFactura=idFacturas;

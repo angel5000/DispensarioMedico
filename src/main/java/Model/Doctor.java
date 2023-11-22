@@ -17,8 +17,9 @@ public class Doctor extends Usuario {
     }
     
     public  Doctor(int idDoctor,String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
-   String Telefono,String NumCelular,String Canton, String Especialidad,String Titulacion, String Experiencia,String Usuario, String Contraseña){
-        super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton);
+   String Telefono,String NumCelular,String Canton, char Genero,String CorreoElectronico,String Especialidad,String Titulacion, String Experiencia,String Usuario, String Contraseña){
+        super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton
+        , Genero, CorreoElectronico);
         
         this.Especialidad=Especialidad;
         this.Titulacion=Titulacion;

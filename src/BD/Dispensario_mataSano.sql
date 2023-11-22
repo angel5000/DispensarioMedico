@@ -7,7 +7,7 @@ CREATE USER doctor1 IDENTIFIED BY 123456 default tablespace users;
 CREATE USER paciente1 IDENTIFIED BY 123456 default tablespace users;*/
 
 --CREACION DE ROLES----
-/*create role medicos;
+create role medicos;
 create role pacientes;
 
 ---CREACION DE SINONIMOS PARA LAS TABLAS
@@ -20,12 +20,11 @@ GRANT CREATE SESSION TO paciente1;
 GRANT CREATE SESSION TO doctor1;
 grant medicos to doctor1;
 grant pacientes to paciente1;
-grant select,insert on ingresos to paciente1;
+grant select,insert on citas_medicas to paciente1;
 grant select,insert on paciente to paciente1;
-grant select on medico to paciente1;
 grant select on medico to doctor1;
-grant select on ingresos to doctor1;
-grant select on paciente to doctor1;*/
+grant select on citas_medicas to doctor1;
+
 ----------------------------------------------
 
 
@@ -53,19 +52,17 @@ Activa char(1),
 constraint Rolfk FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
 constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE)
 );
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = 'Angel123456';
+ SELECT ID_DatosUsuario
+    FROM UsuariosPaciente
+    WHERE   HashedContrasena = HASHBYTES('SHA2_512', @Contraseña + CONVERT(nvarchar(32), Salt));
 
 select *from UsuariosPaciente
 delete from UsuariosPaciente
-DECLARE @Salt VARBINARY(32);
-SET @Salt = CRYPT_GEN_RANDOM(32); 
-INSERT INTO UsuariosPaciente (ID_DatosUsuario, Usuario, Salt, HashedContrasena)
-VALUES (37, 'Ang5000', @Salt, HASHBYTES('SHA2_512', @Salt + CAST('Angel123456' AS NVARCHAR(MAX))));
-
-
 
 DECLARE @Salt VARBINARY(32);
 SET @Salt = CRYPT_GEN_RANDOM(32); 
-
 DECLARE @Contraseña NVARCHAR(MAX);
 SET @Contraseña = 'Angel123456';
 
@@ -77,64 +74,101 @@ VALUES (
     HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
 );
 
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = 'Angel123456';
 
-
-
-/*--------------------------------*/
-DECLARE @Salt  VARBINARY(32);
-SET @Salt = CRYPT_GEN_RANDOM(32); 
-DECLARE @InputPassword NVARCHAR(MAX);
-SET @InputPassword = 'Angel123456'; 
-
-DECLARE @StoredHashedPassword VARBINARY(64);
-SELECT @StoredHashedPassword = HashedContrasena
+SELECT ID_DatosUsuario
 FROM UsuariosPaciente
-WHERE Usuario = 'Ang5000';
-
-DECLARE @InputHashedPassword VARBINARY(64);
-SET @InputHashedPassword = HASHBYTES('SHA2_512', @Salt + CAST(@InputPassword AS NVARCHAR(MAX)));
-
-IF @InputHashedPassword = @StoredHashedPassword
-    PRINT 'Contraseña válida';
-ELSE
-    PRINT 'Contraseña inválida';
+WHERE HashedContrasena = HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contraseña);
 
 
 
 
 
+select*from Medico
+select *from Rol
+select*from Citas_Medicas
+select*from UsuariosMedicos
 create table UsuariosMedicos(
 IDUsuario int PRIMARY KEY identity (100,1),
-ID_DatosMedico int,
+ID_DatosMedico int not null,
 Usuario varchar(50)unique,
-Contraseña varchar(50),
-Rol int,
-Activa char(1),
+Rol int not null,
+Activa char(1) not null,
+ Salt VARBINARY(32) NOT NULL,
+ HashedContrasena VARBINARY(64) NOT NULL,
 constraint Rolfk2 FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
 constraint UsuarioMCfk FOREIGN KEY (ID_DatosMedico) REFERENCES Medico(ID_medico)
 );
 
+
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = '123456';
+
+INSERT INTO UsuariosMedicos(ID_DatosMedico, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUEs(137,'CarlosPe164',101,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña));
+
+
+
+
+
+
+
+
+
+
+
+
+
 select *from pacientes
 select*from Rol
 select*from UsuariosPaciente
+
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = '123456';
+
+INSERT INTO UsuariosPaciente (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUEs(46,'Fernangmz111',100,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña));
+	select*from Citas_Medicas
+	select*from Factura
+	select*from PagosRealizados
+	delete from PagosRealizados WHERE IdPaciente =40
+	delete from Citas_Medicas where IDPaciente=40
+	delete from Factura where ID_Paciente=40;
 insert into UsuariosPaciente(ID_DatosUsuario,Usuario,Contraseña,Rol,Activa ) 
-values(17,'angel5000','123456',100,'S');
+values(38,,'123456',100,'S'),
+(39,,'123456',100,'S'),
+(40,,'123456',100,'S'),
+(41,'123456',100,'S'),
+(42,,'123456',100,'S'),
+(43,'123456',100,'S'),
+(44,'123456',100,'S'),
+(45,'123456',100,'S'),
+(46,'123456',100,'S');
 
 -----------PACIENTES----------
 drop table pacientes
 create table pacientes(
 ID_PACIENTE int PRIMARY KEY identity (001,1),
 Cedula varchar(10) NOT NULL,
-Nombres varchar(50),
-Apellidos varchar(50),
-Fecha_nacimiento varchar(10),
-Provincia varchar(50),
-canton varchar(50),
-Direccion varchar(50),
-Telefono varchar(10),
-NumCelular varchar(10),
-Genero varchar(100),
-CorreoElectronico varchar(100),
+Nombres varchar(50)NOT NULL,
+Apellidos varchar(50)NOT NULL,
+Fecha_nacimiento varchar(10)NOT NULL,
+Provincia varchar(50)NOT NULL,
+canton varchar(50)NOT NULL,
+Direccion varchar(50)NOT NULL,
+NumCelular varchar(10)NOT NULL,
+Genero varchar(100)NOT NULL,
+CorreoElectronico varchar(100)NOT NULL,
+Telefonoid int NOT NULL
 );
 /*alter table pacientes
 add canton varchar(50);
@@ -145,36 +179,84 @@ alter table pacientes add CorreoElectronico varchar(100)
 update pacientes set Direccion='Los vergeles, Coop. los vergeles Mz M s3' where ID_PACIENTE=38*/
 
 ----INGRESO DE DATOS PACIENTE
-insert into  pacientes(Cedula,Nombres,Apellidos ,Fecha_nacimiento,Provincia,Direccion,Telefono,NumCelular,canton, Genero, CorreoElectronico )
-values('0946584566', 'Angel David ', 'Vergara Paredes', '31/01/2000', 'Guayas', 'Prosperina, Mercado de la Prosperina', '044541268', '0984659455', 'Guayaquil', 'M', 'angel.vergara@gmail.com'),
-    ('0985694588', 'David Alberto ', 'Paredes Perez', '24/04/1999', 'Guayas', 'Los vergeles, Coop. los vergeles Mz M s3', '041236845', '0954685666', 'Guayaquil', 'M', 'david.paredes@gmail.com'),
-    ('1718593209', 'Lucia Beatriz', 'Garcia Herrera', '08/09/1992', 'Guayas', 'Calle A No.23-45', '049685748', '0987456321', 'Guayaquil', 'F', 'lucia.garcia@gmail.com'),
-    ('0914761293', 'Pedro Andres', 'Martinez Sanchez', '12/05/1985', 'Guayas', 'Avenida B No.34-12', '049996874', '0987123456', 'Guayaquil', 'M', 'pedro.martinez@gmail.com'),
-    ('1301876512', 'Maria Raquel ', 'Paz Torres', '03/12/1976', 'Guayas', 'Calle C No.12-34', '041368588', '0998456789', 'Guayaquil', 'F', 'maria.paz@gmail.com'),
-    ('1718645203', 'Andres Javier', 'Alvarado Lopez', '25/06/1990', 'Guayas', 'Avenida D No.45-67', '0248695522', '0967452314', 'Guayaquil', 'M', 'andres.alvarado@gmail.com'),
-    ('0913758294', 'Sofia Julia', 'Vasquez Jimenez', '14/10/1987', 'Santa Elena', 'Calle E No.56-78', '027496684', '0987321567', 'Salinas', 'F', 'sofia.vasquez@gmail.com'),
-    ('0996548265', 'Juan Daniel', 'Flores Garcia', '28/02/1986', 'Santa Elena', 'Avenida F No.67-89', '024856987', '0997456321', 'La libertad', 'M', 'juan.flores@gmail.com'),
-    ('0986554852', 'Carla Silvia', 'Barrera Vargas', '16/07/1983', 'Santa Elena', 'Calle G No.78-90', '0478863548', '0967452314', 'Santa Elena', 'F', 'carla.barrera@gmail.com'),
-    ('0956842548', 'Fernando Pedro', 'Gomez Torres', '29/11/1991', 'Santa Elena', 'Avenida H No.89-12', '045568135', '0987321567', 'La libertad', 'M', 'fernando.gomez@gmail.com');
+DELETE FROM pacientes
+update pacientes set Telefonoid=1 where ID_PACIENTE =37
+update pacientes set Telefonoid=2 where ID_PACIENTE =38
+update pacientes set Telefonoid=3 where ID_PACIENTE =39
+update pacientes set Telefonoid=4 where ID_PACIENTE =40
+update pacientes set Telefonoid=5 where ID_PACIENTE =41
+
+update pacientes set Telefonoid=6 where ID_PACIENTE =42
+update pacientes set Telefonoid=7 where ID_PACIENTE =43
+update pacientes set Telefonoid=8 where ID_PACIENTE =44
+update pacientes set Telefonoid=9 where ID_PACIENTE =45
+update pacientes set Telefonoid=10 where ID_PACIENTE =46
+select*from Especialidad
+ALTER TABLE Medico
+add Especialidadid INT;
+
+select *from Medico
+-- Actualizar la nueva columna con los datos de la columna original
+UPDATE Medico
+SET Especialidadid = CAST(Especialidad AS INT);
+
+-- Eliminar la columna original
+update Medico SET Especialidad 
+
+ALTER TABLE pacientes
+DROP COLUMN Telefono;
 
 
+alter table pacientes 
+select*from pacientes
+insert into  pacientes(Cedula,Nombres,Apellidos ,Fecha_nacimiento,Provincia,Direccion,NumCelular,canton, Genero, CorreoElectronico,Telefonoid )
+values('0946584566', 'Angel David ', 'Vergara Paredes', '31/01/2000', 'Guayas', 'Prosperina, Mercado de la Prosperina', '0984659455', 'Guayaquil', 'M', 'angel.vergara@gmail.com',1),
+    ('0985694588', 'David Alberto ', 'Paredes Perez', '24/04/1999', 'Guayas', 'Los vergeles, Coop. los vergeles Mz M s3',  '0954685666', 'Guayaquil', 'M', 'david.paredes@gmail.com',2),
+    ('1718593209', 'Lucia Beatriz', 'Garcia Herrera', '08/09/1992', 'Guayas', 'Calle A No.23-45', '0987456321', 'Guayaquil', 'F', 'lucia.garcia@gmail.com',3),
+    ('0914761293', 'Pedro Andres', 'Martinez Sanchez', '12/05/1985', 'Guayas', 'Avenida B No.34-12',  '0987123456', 'Guayaquil', 'M', 'pedro.martinez@gmail.com',4),
+    ('1301876512', 'Maria Raquel ', 'Paz Torres', '03/12/1976', 'Guayas', 'Calle C No.12-34',  '0998456789', 'Guayaquil', 'F', 'maria.paz@gmail.com',5),
+    ('1718645203', 'Andres Javier', 'Alvarado Lopez', '25/06/1990', 'Guayas', 'Avenida D No.45-67',  '0967452314', 'Guayaquil', 'M', 'andres.alvarado@gmail.com',6),
+    ('0913758294', 'Sofia Julia', 'Vasquez Jimenez', '14/10/1987', 'Santa Elena', 'Calle E No.56-78',  '0987321567', 'Salinas', 'F', 'sofia.vasquez@gmail.com',7),
+    ('0996548265', 'Juan Daniel', 'Flores Garcia', '28/02/1986', 'Santa Elena', 'Avenida F No.67-89', '0997456321', 'La libertad', 'M', 'juan.flores@gmail.com',8),
+    ('0986554852', 'Carla Silvia', 'Barrera Vargas', '16/07/1983', 'Santa Elena', 'Calle G No.78-90',  '0967452314', 'Santa Elena', 'F', 'carla.barrera@gmail.com',9),
+    ('0956842548', 'Fernando Pedro', 'Gomez Torres', '29/11/1991', 'Santa Elena', 'Avenida H No.89-12',  '0987321567', 'La libertad', 'M', 'fernando.gomez@gmail.com',10);
 
+	select*from TelefonosPacientes
+	create TABLE TelefonosPacientes (
+    ID_Telefono INT PRIMARY KEY  identity (1,1),
+    ID_Paciente INT,
+    NumeroTelefono VARCHAR(14),
+    constraint numpcfk FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente)
+);
+insert into TelefonosPacientes(ID_Paciente ,NumeroTelefono)
+values(37,'044541268'),
+    (38,'041236845'),
+    ( 39,'049685748'),
+    (40,'049996874'),
+    ( 41,'041368588'),
+    (42,'0248695522'),
+    (43,'027496684'),
+    (44,'024856987'),
+    ( 45,'0478863548'),
+    (46,'045568135');
+	insert into TelefonosPacientes(ID_Paciente ,NumeroTelefono)
+values(46,'026338777');
 
 -------TABLAS MEDICO-------
 
 create table Medico(
 ID_medico INT PRIMARY KEY identity (0001,1),
-CodigoMedico varchar(100),
-Cedula varchar(10),
-Nombres varchar(50),
-Apellidos varchar(50),
-Especialidad varchar(100),
-Telefono varchar(10),
-NumCelular varchar(10),
-DireccionDomicilio varchar(100),
-UbicacionDisp int,
-Genero char(1),
-CorreoElectronico varchar(100),
+CodigoMedico varchar(100) NOT NULL,
+Cedula varchar(10)NOT NULL,
+Nombres varchar(50)NOT NULL,
+Apellidos varchar(50)NOT NULL,
+Especialidad varchar(100)NOT NULL,
+Telefono varchar(10)NOT NULL,
+NumCelular varchar(10)NOT NULL,
+DireccionDomicilio varchar(100)NOT NULL,
+UbicacionDisp int NOT NULL,
+Genero char(1)NOT NULL,
+CorreoElectronico varchar(100)NOT NULL,
 constraint Ubicafk FOREIGN KEY (UbicacionDisp) REFERENCES Ubicacion(IDUbicacion)
 );
 /*
@@ -254,6 +336,12 @@ Motivo int,
  constraint motivfk FOREIGN KEY (Motivo) REFERENCES MotivosCitasMedicas(IDMotivo),
 constraint horariocitafk FOREIGN KEY (IDHorarioCitas) REFERENCES HorariosCitas(ID_HORARIO)
 );
+INSERT INTO citas_medicas (IDPaciente,IDMedico,IDHorarioCitas,Motivo) 
+VALUES 
+( 40, 135,  19, null);
+select*from Citas_Medicas
+delete from Citas_Medicas where IDCita=8
+
 /*delete from Citas_Medicas
 select*from MotivosCitasMedicas
 
@@ -299,7 +387,7 @@ especialiMed int,
 constraint espicalfk FOREIGN KEY (especialiMed) REFERENCES Especialidad(IDEspecialidad)
 );
 
-
+select *from MotivosCitasMedicas
 /*
 alter table MotivosCitasMedicas drop column IDMedico
 delete from MotivosCitasMedicas
@@ -315,7 +403,14 @@ VALUES
 ( 401, 'Procedimientos de Endodoncia'),
 ( 401, 'Prótesis Dentales');
 
-
+INSERT INTO MotivosCitasMedicas (especialiMed ,Servicio) 
+VALUES 
+( 402, 'Consulta General'),
+( 402, 'Examenes Ginecologicos'),
+( 402, 'Control y Asesoramientos'),
+( 402, 'Colocación y Retiro de Dispositivos Intrauterinos (DIU)'),
+( 402, 'Evaluacion de la Infertilidad'),
+( 402, 'Prevención y Detección del Cancer de Mama:');
 
 create table CostoServicios(
 IDCostServi INT PRIMARY KEY identity (001,1),
@@ -340,8 +435,8 @@ VALUES
 
 create table Ubicacion(
 IDUbicacion INT PRIMARY KEY identity (0200,1),
-Sector varchar(20),
-Direccion varchar(150)
+Sector varchar(20) not null,
+Direccion varchar(150) not null
 
 );
 
@@ -360,10 +455,22 @@ SELECT*FROM Medico
 select*from MotivosCitasMedicas
 SELECT*FROM Citas_Medicas
 select*from HorariosCitas*/
+select*from MotivosCitasMedicas
+select *from Areas
 INSERT INTO citas_medicas (IDPaciente,IDMedico,IDHorarioCitas,Motivo) 
 VALUES 
-( 37, 135,  9, 71),
-(38, 136,  11, 72);
+( 37, 135,  15, 71),
+(38, 136,  17, 72);
+update Citas_Medicas set Motivo=81 where IDCita=6
+
+SELECT*FROM pacientes
+INSERT INTO citas_medicas (IDPaciente,IDMedico,IDHorarioCitas,Motivo) 
+VALUES 
+( 39, 137,  19, 71),
+(40, 136,  20, 71),
+( 41, 135,  18, 71);
+
+
 
 
 -----------DATOS CITAS MEDICAS-------------
@@ -378,9 +485,35 @@ ID_Doctor int,
 Areas int,
 FechaHora datetime,
 Disponibilidad char(1),
- constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
+ constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico),
+constraint Areahfk FOREIGN KEY (Areas) REFERENCES Areas(ID_Areas)
+);
 
-);/*
+
+
+		SELECT 
+        m.Nombres+' '+ m.Apellidos as Doctor,
+		m.Especialidad,
+        HC.FechaHora,
+        HC.Disponibilidad,
+       A.Habitacion,
+       U.Sector,
+       U.Direccion
+    FROM 
+        HorariosCitas HC
+    INNER JOIN 
+       Areas A ON HC.Areas = A.ID_Areas
+	    INNER JOIN 
+       Medico m ON HC.ID_Doctor = m.ID_medico
+    INNER JOIN 
+      Ubicacion U ON M.UbicacionDisp=U.IDUbicacion
+	 
+    WHERE 
+        HC.Disponibilidad ='S'and u.Sector='NORTE' AND M.Especialidad='Medicina General';
+
+		select * FROM Medico
+		select*from MotivosCitasMedicas
+/*
 delete from HorariosCitas
 SELECT*FROM HorariosCitas
 select*from Medico*/
@@ -389,29 +522,43 @@ insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad)
 values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13:00','S')
 ,(22,5,'22/11/23 11:00','S'),(23,3,'18/11/23 10:30','S');*/
 
+update HorariosCitas set Disponibilidad ='T' WHERE ID_HORARIO=15
 insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
-values(126,10,'21/11/23 07:30','S'),(127,11,'21/11/23 16:30','S')
-,(130,14,'22/11/23 16:30','S'),
-(135,15,'22/11/23 11:30','S'),(132,17,'22/11/23 13:00','S')
-,(136,16,'23/11/23 11:00','S');
+values(126,28,'21/11/23 07:30','S'),(127,29,'21/11/23 16:30','S')
+,(130,32,'22/11/23 16:30','S'),
+(135,33,'22/11/23 11:30','S'),(132,35,'22/11/23 13:00','S')
+,(136,34,'23/11/23 11:00','S');
 
 
+insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
+values(135,33,'22/11/23 13:00','S'),(137,35,'22/11/23 15:00','S')
+,(136,37,'22/11/23 9:00','S');
+
+
+delete from HorariosCitas where ID_HORARIO =11
 
 create table Areas(
 ID_Areas INT PRIMARY KEY identity (0001,1),
 ID_Doctor int not null,
 Habitacion varchar(10),
+Ubicacionarea  int,
  constraint MEDICoFK2 FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico)
+ constraint areaubifk FOREIGN KEY (Ubicacionarea) REFERENCES Ubicacion(IDUbicacion)
 );
+ALTER TABLE 
 /*
 select*from Medico
 delete from Areas
 SELECT*FROM Areas*/
-insert into Areas (ID_Doctor ,Habitacion ) 
-values(126,'A12'),(127,'A13'),(128,'A14'),(129,'A15'),(130,'A16'),(135,'A17'),
-(136,'A18'),(132,'A19'),(131,'A20');
+select*from Ubicacion
 
+insert into Areas (ID_Doctor ,Habitacion, Ubicacionarea ) 
+values(126,'A12',200),(127,'A13',201),(128,'B14',202),(129,'A15',200),(130,'D16',203),(135,'A17',200),
+(136,'C18',201),(132,'B19',202),(131,'C20',201);
+update Areas set Habitacion ='D16'where ID_Areas =32
 
+insert into Areas (ID_Doctor ,Habitacion, Ubicacionarea ) 
+values(137,'D18',203);
 
 -- Crear tabla de Historial Medico
 CREATE TABLE Historial_Medico (
@@ -425,20 +572,21 @@ CREATE TABLE Historial_Medico (
     Receta VARCHAR(255),
   constraint pcientefk FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
    constraint mediccofk FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
-   constraint Citafk FOREIGN KEY (FechaVisita) REFERENCES Citas_Medicas(IDCita)
+   alter table Historial_Medico add constraint Citafk FOREIGN KEY (FechaVisita) REFERENCES HorariosCitas(ID_Horario)
 );
 delete from Historial_Medico
 SELECT*FROM Historial_Medico
 -- Ingresar datos en la tabla de Pacientes
 
 SELECT
+ pacientes.Apellidos AS APELLIDO_Paciente,
+    Medico.Apellidos AS APELLIDO_Medico,
     Historial_Medico.Sintomas,
     Historial_Medico.Diagnostico,
     Historial_Medico.Tratamiento,
     Historial_Medico.Receta,
-    pacientes.Apellidos AS APELLIDO_Paciente,
-    Medico.Apellidos AS APELLIDO_Medico,
-	HorariosCitas.FechaHora AS HORARIO
+ 
+	HorariosCitas.FechaHora AS FechaCitaMedica
 
 FROM
     Historial_Medico
@@ -452,11 +600,37 @@ inner join HorariosCitas on HorariosCitas.ID_HORARIO=Historial_Medico.FechaVisit
 SELECT*FROM HorariosCitas
 SELECT*FROM Citas_Medicas
 select*from Medico
+select*from pacientes
+delete from Citas_Medicas where IDPaciente=40
+INSERT INTO Historial_Medico (   ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta) 
+VALUES 
+( 37, 135, 15, 'LE DUELE EL ESTOMAGO', 'DIARREA', 'CUIDADO ESTOMACAL', 'SUERO ORAL');
 
 
 INSERT INTO Historial_Medico (   ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta) 
 VALUES 
-( 37, 135, 3, 'LE DUELE EL ESTOMAGO', 'DIARREA', 'CUIDADO ESTOMACAL', 'SUERO ORAL');
+( 38, 136, 17, 'DOLOR DE GARGANTA, ESTORNUDO, TOS, LAGRIMEO', 'RESFRIADO COMUN', 
+'USO DE ANTIBIOTICOS, ANTIGRIPALES', 'PARACETAMOL, LEMONFLU, TUSOLVINA FORTE');
+
+INSERT INTO Historial_Medico (ID_Paciente, ID_Medico, FechaVisita, Sintomas, Diagnostico, Tratamiento, Receta)
+VALUES
+(39, 137, 19, 'FIEBRE, DOLOR DE CABEZA, FATIGA', 'GRIPE', 'REPOSO, HIDRATACIÓN', 'IBUPROFENO, VITAMINA C'),
+(40, 136, 20, 'MAREOS, NAUSEAS, VOMITOS', 'GASTROENTERITIS', 'DIETA BLANDA, HIDRATACIÓN', 'DOMPERIDONA, SALES DE REHIDRATACIÓN'),
+(41, 135, 18, 'DOLOR ABDOMINAL, DIARREA', 'INFECCIÓN INTESTINAL', 'ANTIBIÓTICOS, REPOSO', 'CIPROFLOXACINO, PROBIÓTICOS');
+(42, 140, 21, 'DOLOR EN EL PECHO, PALPITACIONES', 'ARRITMIA CARDÍACA', 'MEDICACIÓN ANTIARRÍTMICA', 'DIGOXINA, AMIODARONA'),
+(43, 141, 22, 'DOLOR ARTICULAR, HINCHAZÓN', 'ARTROSIS', 'FISIOTERAPIA, ANALGÉSICOS', 'PARACETAMOL, DICLOFENACO');
+
+
+
+
+
+
+
+
+
+
+
+
 /*( 'Ana', 'García', '1990-08-15', 'Femenino', 'Urdesa Central', '234567890', 'ana.garcia@email.com'),
 ( 'Carlos', 'Gómez', '1985-12-03', 'Masculino', 'La Alborada', '345678901', 'carlos.gomez@email.com'),
 ( 'María', 'López', '1982-06-25', 'Femenino', 'Los Ceibos', '456789012', 'maria.lopez@email.com'),
@@ -490,20 +664,21 @@ select*from factura
 
 create table Factura(
  ID_Factura INT PRIMARY KEY identity (1200,1),
- ID_Paciente INT,
- ID_Medico INT,
-FechaVisita INT,
-Motivo int,
- Costo int,
- Iva int ,
- Subtotal float,
- Total float,
+ ID_Paciente INT NOT NULL,
+ ID_Medico INT NOT NULL,
+FechaVisita INT NOT NULL,
+Motivo int NOT NULL,
+ Iva float NOT NULL,
+ Subtotal float NOT NULL,
+ Total float NOT NULL,
+ costo float,
  constraint pcientefk2 FOREIGN KEY (ID_Paciente) REFERENCES Pacientes(ID_Paciente),
  constraint mediccofk2 FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
  constraint Citafk2 FOREIGN KEY (FechaVisita) REFERENCES HorariosCitas(ID_HORARIO),
  constraint Motivofk FOREIGN KEY (motivo) REFERENCES MotivosCitasMedicas(IDMotivo),
-  constraint Costofk FOREIGN KEY (Costo) REFERENCES CostoServicios(IDCostServi)
+ 
 );
+alter tablE Factura  add 
 /*delete from Factura
 alter table factura add Iva float
 select *from Factura
@@ -511,7 +686,19 @@ select*from HorariosCitas
 select*from Citas_Medicas
 select*from CostoServicios*/
 insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
-values(37,135,9,71,8,0,5.00,5.00);
+values(37,135,15,71,8,0,5.00,5.00);
+
+insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
+values(38,136,17,71,8,0,5.00,5.00);
+
+insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
+values(39,137,19,71,8,0,5.00,5.00);
+
+insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
+values(40,136,20,71,8,0,5.00,5.00);
+
+insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
+values(41,135,18,71,8,0,5.00,5.00);
 select*from Medico
 
 SELECT
@@ -522,7 +709,6 @@ pacientes.Nombres,
    pacientes.Provincia,
    pacientes.Direccion,
    pacientes.canton,
-   pacientes.Telefono,
    pacientes.NumCelular,
    Medico.Nombres as NombreDoctor,
    Medico.Apellidos as ApellidoDoctor,
@@ -532,7 +718,8 @@ pacientes.Nombres,
 	CostoServicios.Descuentos,
 	Factura.Iva,
 	Factura.Subtotal,
-	Factura.Total
+	Factura.Total,
+	Factura.ID_Factura
 FROM
   Factura
   inner JOIN
@@ -543,8 +730,9 @@ FROM
    MotivosCitasMedicas ON Factura.Motivo = MotivosCitasMedicas.IDMotivo
  inner JOIN
   CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
-  WHERE pacientes.Cedula=0946584566;
+  WHERE pacientes.ID_PACIENTE=40;
 
+  select*from MetodoPago
 	create table MetodoPago(
 	ID_MetPago INT PRIMARY KEY identity (0300,1),
 	Metodo varchar(60)
@@ -561,9 +749,9 @@ FROM
 	idMotivo int,
 	idMetodoPago int ,
 	 constraint pcintefk2 FOREIGN KEY (IdPaciente) REFERENCES Pacientes(ID_Paciente),
-  constraint Motiofk FOREIGN KEY (idMotivo) REFERENCES MotivosCitasMedicas(IDMotivo),
   constraint Metodopg FOREIGN KEY (idMetodoPago) REFERENCES MetodoPago(ID_MetPago)
 	);
-	insert into PagosRealizados (IdPaciente,idMotivo,idMetodoPago)
-values(37,71,300);
+	insert into PagosRealizados (IdPaciente,idMetodoPago)
+values(37,300);
+DELETE FROM PagosRealizados WHERE ID_MetPago=4000
 select*from PagosRealizados

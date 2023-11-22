@@ -1,18 +1,134 @@
 use SQLADV
+
+create PROCEDURE DatoPaciente
+    @id varchar(10)
+AS
+BEGIN
+    SELECT *
+    FROM pacientes
+    WHERE ID_PACIENTE = @id;
+END;
+
+create PROCEDURE TelefonoPaciente
+    @Numtele varchar(10)
+AS
+BEGIN
+ SELECT TelefonosPacientes.NumeroTelefono
+    FROM TelefonosPacientes 
+	join pacientes on TelefonosPacientes.ID_Paciente=pacientes.ID_PACIENTE
+    WHERE pacientes.ID_PACIENTE = @Numtele;
+END;
+
+
+create PROCEDURE ListaEspecialidad
+   
+AS
+BEGIN
+    SELECT *
+    FROM Especialidad;
+    
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create PROCEDURE VerificarUsuario
+    @Usuario VARCHAR(50),
+    @Contrasena VARCHAR(50),
+	@IDUsuario INT OUTPUT
+
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+   set @IDUsuario=null;
+
+    -- Verificar si el usuario y contraseña existen
+    SELECT @IDUsuario=ID_DatosUsuario
+    FROM UsuariosPaciente
+    WHERE  Usuario =@Usuario and HashedContrasena =  HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contrasena);
+
+
+    -- Devolver el ID del usuario si existe
+    IF @Contrasena IS NOT NULL
+        SELECT @IDUsuario AS 'ID del Usuario';
+    ELSE
+        PRINT 'Usuario o contraseña incorrectos';
+
+END;
+
+
+-- Definir valores de ejemplo para Usuario y Contraseña
+DECLARE @UsuarioEjempl VARCHAR(50) = 
+DECLARE @ContrasenaEjempl VARCHAR(50) = ;
+
+-- Ejecutar el procedimiento almacenado
+
+DECLARE @IDUsuari int ;
+EXEC VerificarUsuario
+    @Usuario = 'Ang5000',
+    @Contrasena = 'Angel123456',
+	 @IDUsuario = @IDUsuari output 
+	
+
+
+create PROCEDURE GenerarFactura
+    @ID_Paciente INT,
+    @ID_Medico INT,
+    @FechaVisita INT,
+    @Motivo INT,
+      @Subtotal FLOAT,
+	   @Total FLOAT,
+    @Iva FLOAT,
+	 @Costo Float
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar la factura
+    INSERT INTO Factura (ID_Paciente, ID_Medico, FechaVisita, Motivo, Subtotal ,Total,Iva ,Costo)
+    VALUES (@ID_Paciente, @ID_Medico, @FechaVisita, @Motivo,  @Subtotal, @Total,@Iva, @Costo);
+
+  
+END;
+
+create PROCEDURE ConsultarMotivos
+ @ID_Espe INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT IDMotivo, Servicio, CostoServicios.Costos
+    FROM MotivosCitasMedicas
+	inner join CostoServicios on MotivosCitasMedicas.IDMotivo=CostoServicios.IDMCM
+	where especialiMed=@ID_Espe;
+END;
+SELECT *FROM CostoServicios
+
+
+
 create PROCEDURE FacturaPaciente
-    @cedulaPaciente VARCHAR(20)
+    @idPaciente int
 AS
 BEGIN
     SELECT
+	Factura.ID_Factura,
         pacientes.Nombres,
         pacientes.Apellidos,
         pacientes.Cedula,
-        pacientes.Fecha_nacimiento,
         pacientes.Provincia,
         pacientes.Direccion,
         pacientes.Canton,
-        pacientes.Telefono,
-        pacientes.NumCelular,
         Medico.Nombres AS NombreDoctor,
         Medico.Apellidos AS ApellidoDoctor,
         Medico.Especialidad,
@@ -33,8 +149,89 @@ BEGIN
     INNER JOIN
         CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
     WHERE
-        pacientes.Cedula = @cedulaPaciente;
+        pacientes.ID_PACIENTE =40 @idPaciente;
 END;
+
+create PROCEDURE ConsultaCitasMedicas
+@Disponibili CHAR(1),
+@Ubicacion varchar(10) ,
+@Especialidad VARCHAR(60)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+	hc.ID_HORARIO,
+	m.ID_medico,
+        m.Nombres + ' ' + m.Apellidos AS Doctor,
+		m.Especialidad,
+        HC.FechaHora,
+        HC.Disponibilidad,
+        A.Habitacion,
+        U.Sector,
+        U.Direccion
+    FROM 
+        HorariosCitas HC
+    INNER JOIN 
+        Areas A ON HC.Areas = A.ID_Areas
+    INNER JOIN 
+        Medico m ON HC.ID_Doctor = m.ID_medico
+    INNER JOIN 
+        Ubicacion U ON M.UbicacionDisp = U.IDUbicacion
+    WHERE 
+        HC.Disponibilidad = @Disponibili AND U.Sector = @Ubicacion AND M.Especialidad = @Especialidad;
+END;
+
+CREATE PROCEDURE IngresarCitaMedica
+    @IDPaciente INT,
+    @IDMedico INT,
+    @IDHorarioCitas INT,
+    @Motivo INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Citas_Medicas (IDPaciente, IDMedico, IDHorarioCitas, Motivo)
+    VALUES (@IDPaciente, @IDMedico, @IDHorarioCitas, @Motivo);
+
+END;
+create PROCEDURE IngresarPago
+    @IdPaciente INT,
+  
+    @IdMetodoPago INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar el pago realizado
+    INSERT INTO PagosRealizados (IdPaciente, idMetodoPago)
+    VALUES (@IdPaciente,  @IdMetodoPago);
+
+    
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 create PROCEDURE AutenticarUsuario

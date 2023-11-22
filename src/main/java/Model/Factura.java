@@ -19,10 +19,10 @@ public class Factura extends Paciente  {
     }
     
     public Factura(int idpaciente,String Nombres, String ApellidoDoc,String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
-   String Telefono,String NumCelular,String Canton, int idHistorialMedico,  String Usuario, String Contraseña,int CodigoFactura, 
+   String Telefono,String NumCelular,String Canton,char Genero,String CorreoElectronico, int idHistorialMedico,  String Usuario, String Contraseña,int CodigoFactura, 
    float Subtotal, float Total,float Descuento,float Iva, String Motivos, String Especialidad,float costo){
         super( idpaciente,Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton
-           , idHistorialMedico,   Usuario,  Contraseña);
+            ,Genero,CorreoElectronico, idHistorialMedico,   Usuario,  Contraseña);
        this.costo=costo;
         this.CodigoFactura= CodigoFactura;
         this.Subtotal = Subtotal;

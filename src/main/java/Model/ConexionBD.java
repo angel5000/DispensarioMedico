@@ -19,10 +19,10 @@ public class ConexionBD {
             
             
         String hostname = "localhost";
-            String sqlInstanceName = "DESKTOP-BUQ5QOC"; //computer name 
-            String sqlDatabase = "SQLADV";  //sql server database name
+            String sqlInstanceName = "DESKTOP-BUQ5QOC"; 
+            String sqlDatabase = "SQLADV";  
             String sqlUser = "sa";
-            String sqlPassword = "Angpro500"; //passwrod sa account
+            String sqlPassword = "Angpro500"; 
 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
