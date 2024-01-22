@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * @author angeldvvp
  */
 public class AdmCitasMedicas {
-    
+     CitasMedicas cm;
     public void IngresarCita(int idpaciente,int idmedico,int idhorario, int motivo) throws SQLException, Excepciones {
      
         String query = "{CALL IngresarCitaMedica(?,?,?,?)}";
@@ -62,7 +62,7 @@ public class AdmCitasMedicas {
                 stmt.execute();
              ResultSet rs = stmt.executeQuery();
             while (rs.next()) {//RECORRIDO DE DATOS
-               CitasMedicas cm = new CitasMedicas();
+               cm = new CitasMedicas();
                cm.setIdPaciente(rs.getInt("IDPaciente"));
                cm.setIdMedico(rs.getInt("IDMedico"));
                cm.setIdHorario(rs.getInt("IDHorarioCitas"));
@@ -84,6 +84,50 @@ public class AdmCitasMedicas {
          
               }catch(SQLException e){
                 e.getStackTrace();
+            } catch (Exception ex) { 
+            Logger.getLogger(AdmCitasMedicas.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return ctm;
+    }
+    
+     public List <CitasMedicas> MostrarDetCitas(int idcita){
+        String query = "{CALL DettlCitasMedicas(?)}";
+           List<CitasMedicas> ctm= new ArrayList<>();
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+            
+           stmt.setInt(1, idcita);
+           
+                stmt.execute();
+             ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {//RECORRIDO DE DATOS
+               cm = new CitasMedicas();
+            cm.setIdPaciente(rs.getInt("IDPaciente"));
+                 cm.setNombres(rs.getString("Nombres"));
+                 cm.setCedula(rs.getString("Cedula"));
+                 cm.setDireccion(rs.getString("Direccion"));
+                cm.setApellidos(rs.getString("Apellidos"));
+                cm.setCodigCita(rs.getInt("IDCita"));
+                cm.setNombresdoc(rs.getString("Nombdoc"));
+                cm.setIdHorario(rs.getInt("IDHorarioCitas"));
+                cm.setIdMedico(rs.getInt("ID_medico"));
+                cm.setEspecialidad(rs.getString("Especialidad"));
+                cm.setFechaHora(rs.getTimestamp("FechaCita"));
+                cm.setMotivos(rs.getString("MotivoCita"));
+                
+                System.out.println(cm.getApellidos()+" asd");
+                ctm.add(cm);
+                
+            }
+
+        
+         
+
+         
+              }catch(SQLException e){
+                e.getStackTrace();
+                System.out.println(e.getMessage());
             } catch (Exception ex) { 
             Logger.getLogger(AdmCitasMedicas.class.getName()).log(Level.SEVERE, null, ex);
         } 

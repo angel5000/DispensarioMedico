@@ -70,6 +70,7 @@ VALUES (
 SELECT*FROM Medico
 select*from Rol
 select*from  UsuariosMedico
+select*from EstadoHoraCitas
 create table UsuariosPaciente(
 IDUsuario int PRIMARY KEY identity (100,1),
 ID_DatosUsuario int,

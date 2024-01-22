@@ -10,11 +10,11 @@ import java.util.Date;
  *
  * @author angeldvvp
  */
-public class CitasMedicas extends Paciente implements HorariosInterface,MotivosInterfaces{
+public class CitasMedicas extends Paciente implements HorariosInterface,MotivosInterfaces,Doctorinterface{
     int CodigCita,id;
     float Costo;
-             String motivos, Medico,  Horario;
-             String Doctor; String Especialidad;String Area,  Direccion; Date FechaHora; String  Disponible;
+             String motivos, Medico,  Horario, Especialidad, nombdoc;
+             String Doctor; String Area,  Direccion; Date FechaHora; String  Disponible;
     int idHorario=0; int idMedico=0;
     public CitasMedicas(){
         
@@ -113,6 +113,26 @@ public class CitasMedicas extends Paciente implements HorariosInterface,MotivosI
     @Override
     public void setMotivos(String motivos) {
     this.motivos=motivos;
+    }
+
+    @Override
+    public String getEspecialidad() {
+      return Especialidad;
+    }
+
+    @Override
+    public void setEspecialidad(String Especialidad) {
+       this.Especialidad=Especialidad;
+    }
+
+    @Override
+    public String getNombresdoc() {
+       return nombdoc;
+    }
+
+    @Override
+    public void setNombresdoc(String Nombres) {
+    this.nombdoc=Nombres;
     }
     
     

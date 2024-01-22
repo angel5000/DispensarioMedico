@@ -55,5 +55,32 @@ public class AdmHistMedico {
         return historial;
    
    }
+   
+   public void IngresarHistorialMed(int iD_Paciente ,int iD_Medico,int fechaVisita ,
+           String sintomas ,String diagnostico,String tratamiento,String receta ){
+       
+         String query = "{CALL IngresarHistorial_Medico(?,?,?,?,?,?,?)}";
+         
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+        
+           stmt.setInt(1, iD_Paciente );
+          stmt.setInt(2,iD_Medico);
+          stmt.setInt(3,fechaVisita);
+          stmt.setString(4,sintomas);
+          stmt.setString(5,diagnostico);
+          stmt.setString(6,tratamiento);
+          stmt.setString(7,receta);
+        
+          
+          stmt.execute();
+            
+            }catch(SQLException e){
+                e.getStackTrace();
+                System.out.println(e.getMessage());
+            }
+       
+   }
     
 }

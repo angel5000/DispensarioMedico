@@ -28,7 +28,24 @@ public class Doctor extends Usuario {
         this.Contraseña=Contraseña;
         
     }
+    
+ public String getNombresdoc() {
+        return Nombres;
+    }
 
+    public void setNombresdoc(String Nombres) {
+        this.Nombres = Nombres;
+    }
+
+ @Override
+    public String getApellidos() {
+        return Apellidos;
+    }
+ @Override
+    public void setApellidos(String Apellidos) {
+        this.Apellidos = Apellidos;
+    }
+    
     public String getEspecialidad() {
         return Especialidad;
     }

@@ -1046,7 +1046,7 @@ if(rdtransfer.isSelected()){idpago=302;}
             ct.IngresarCita(idpaciente, idmedic,horario , idmotivo);
             aft.CrearFactura(idpaciente, idmedic, horario, idmotivo, iva,subtotal ,total,Costo);
             gf.GenerarFactura(idpaciente);
-            cth.SetHorariOcupado(horario,3);
+            cth.SetHorariOcupado(horario,1);
          JOptionPane.showMessageDialog(null, "PAGO REALIZADO- CITA MEDICA AGENDADA- FACTURA GENERADA REVISAR SECCION FACTURAS");
             
              }else{
