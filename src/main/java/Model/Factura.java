@@ -1,6 +1,8 @@
 
 package Model;
 
+import java.util.Date;
+
 
 /**
  *
@@ -13,6 +15,7 @@ public class Factura extends Paciente  {
             MotivoCita="", Diagnostico="",*/
     String ApellidoDoc="", Motivos="", Especialidad="";
     float Subtotal=0, Total=0, Descuento=0,Iva=0,costo=0;
+    Date FechaVisita;
     int CodigoFactura=0;
     public Factura(){
         
@@ -20,7 +23,7 @@ public class Factura extends Paciente  {
     
     public Factura(int idpaciente,String Nombres, String ApellidoDoc,String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
    String Telefono,String NumCelular,String Canton,char Genero,String CorreoElectronico, int idHistorialMedico,  String Usuario, String Contraseña,int CodigoFactura, 
-   float Subtotal, float Total,float Descuento,float Iva, String Motivos, String Especialidad,float costo){
+   float Subtotal, float Total,float Descuento,float Iva, String Motivos, String Especialidad,float costo,Date FechaVisita){
         super( idpaciente,Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton
             ,Genero,CorreoElectronico, idHistorialMedico,   Usuario,  Contraseña);
        this.costo=costo;
@@ -31,6 +34,15 @@ public class Factura extends Paciente  {
         this.Iva = Iva;
         this.Motivos=Motivos;
         this.Especialidad=Especialidad;
+        this.FechaVisita=FechaVisita;
+    }
+
+    public Date getFechaVisita() {
+        return FechaVisita;
+    }
+
+    public void setFechaVisita(Date FechaVisita) {
+        this.FechaVisita = FechaVisita;
     }
 
     public String getMotivos() {

@@ -16,7 +16,11 @@ public class Paciente extends Usuario {
     public Paciente(){
         
             }
-    
+     public Paciente(int idPaciente,String Nombres, String Apellidos,String Cedula){
+        super( Nombres, Apellidos, Cedula);
+     
+      
+    }
     public Paciente(int idPaciente,String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
    String Telefono,String NumCelular,String Canton, char Genero,String CorreoElectronico,int idHistorialMedico, String Usuario, String Contraseña){
        super( Nombres, Apellidos, Cedula, FechaNacimiento,  Provincia, Direccion, Telefono, NumCelular, Canton

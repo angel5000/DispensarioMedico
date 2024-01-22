@@ -6,6 +6,7 @@ package Control;
 
 import Model.ConexionBD;
 import Model.HorariosCitas;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,15 +21,15 @@ import java.util.logging.Logger;
  * @author angeldvvp
  */
 public class AdmHorariosCitas {
-    public List<HorariosCitas> HorariosDispo(String disponi, String ubi, String espe) throws SQLException, Excepciones {
+    public List<HorariosCitas> HorariosDispo(int disponi, String ubi, String espe) throws SQLException, Excepciones {
         List<HorariosCitas> hct= new ArrayList<>();
         String query = "{CALL ConsultaCitasMedicas(?,?,?)}";
-          char especiali=' ';
+    
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareCall(query);
              ) {
             
-            stmt.setString(1, disponi);
+            stmt.setInt(1, disponi);
            stmt.setString(2, ubi);
             stmt.setString(3, espe);
          
@@ -41,8 +42,8 @@ public class AdmHorariosCitas {
                 hrc.setArea(rs.getString("Habitacion"));
                 hrc.setDoctor(rs.getString("Doctor"));
                 hrc.setFechaHora(rs.getTimestamp("FechaHora"));
-                especiali=rs.getString("Disponibilidad").charAt(0);
-                  hrc.setDisponible(especiali);
+            
+                  hrc.setDisponible(rs.getString("Disponibilidad"));
                hrc.setDireccion(rs.getString("Direccion"));
                hrc.setSpecialidad(rs.getString("Especialidad"));
                 hct.add(hrc);
@@ -76,6 +77,27 @@ public class AdmHorariosCitas {
             }
         return espe;
         
+        
+        
+    }
+    
+    public void SetHorariOcupado(int idhorario,int idestado){
+        
+        
+          String query = "{CALL ConfirmaEstadoHorario(?,?)}";
+         
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+        
+           stmt.setInt(1, idestado );
+          stmt.setInt(2,idhorario);
+          stmt.execute();
+            
+            }catch(SQLException e){
+                e.getStackTrace();
+            }
+     
         
         
     }

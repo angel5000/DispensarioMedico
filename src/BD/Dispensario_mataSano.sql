@@ -41,6 +41,35 @@ Rol varchar(50)
 select *from Rol
 insert into Rol(Rol) values('PACIENTE'),('MEDICO');
 
+
+create table UsuariosMedico(
+IDMedUsuario int PRIMARY KEY identity (1000,1),
+ID_DatosUsuario int,
+Usuario varchar(50)unique,
+Rol int,
+Activa char(1),
+ Salt VARBINARY(32) NOT NULL,
+ HashedContrasena VARBINARY(64) NOT NULL,
+constraint Rolfkk2 FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
+ constraint Usuariomedfk FOREIGN KEY (ID_DatosUsuario) REFERENCES Medico(ID_medico)
+);
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = '123456';
+
+INSERT INTO UsuariosMedico (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUES (
+    135,
+    'Luis1587',101,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
+);
+
+
+SELECT*FROM Medico
+select*from Rol
+select*from  UsuariosMedico
 create table UsuariosPaciente(
 IDUsuario int PRIMARY KEY identity (100,1),
 ID_DatosUsuario int,
@@ -52,6 +81,7 @@ Activa char(1),
 constraint Rolfk FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
 constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES pacientes(ID_PACIENTE)
 );
+delete from UsuariosMedico
 DECLARE @Contraseña NVARCHAR(MAX);
 SET @Contraseña = 'Angel123456';
  SELECT ID_DatosUsuario
@@ -60,6 +90,10 @@ SET @Contraseña = 'Angel123456';
 
 select *from UsuariosPaciente
 delete from UsuariosPaciente
+
+select *from HorariosCitas
+
+
 
 DECLARE @Salt VARBINARY(32);
 SET @Salt = CRYPT_GEN_RANDOM(32); 
@@ -89,38 +123,6 @@ select*from Medico
 select *from Rol
 select*from Citas_Medicas
 select*from UsuariosMedicos
-create table UsuariosMedicos(
-IDUsuario int PRIMARY KEY identity (100,1),
-ID_DatosMedico int not null,
-Usuario varchar(50)unique,
-Rol int not null,
-Activa char(1) not null,
- Salt VARBINARY(32) NOT NULL,
- HashedContrasena VARBINARY(64) NOT NULL,
-constraint Rolfk2 FOREIGN KEY (Rol) REFERENCES Rol(IDRol),
-constraint UsuarioMCfk FOREIGN KEY (ID_DatosMedico) REFERENCES Medico(ID_medico)
-);
-
-
-DECLARE @Salt VARBINARY(32);
-SET @Salt = CRYPT_GEN_RANDOM(32); 
-DECLARE @Contraseña NVARCHAR(MAX);
-SET @Contraseña = '123456';
-
-INSERT INTO UsuariosMedicos(ID_DatosMedico, Usuario,Rol , Activa,Salt, HashedContrasena)
-VALUEs(137,'CarlosPe164',101,'A',
-    @Salt,
-    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña));
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -138,11 +140,13 @@ VALUEs(46,'Fernangmz111',100,'A',
     @Salt,
     HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña));
 	select*from Citas_Medicas
+	select*from pacientes
+	select*from HorariosCitas
 	select*from Factura
 	select*from PagosRealizados
-	delete from PagosRealizados WHERE IdPaciente =40
-	delete from Citas_Medicas where IDPaciente=40
-	delete from Factura where ID_Paciente=40;
+	delete from PagosRealizados WHERE IdPaciente =37
+	delete from Citas_Medicas where IDPaciente=37
+	delete from Factura where ID_Paciente=37
 insert into UsuariosPaciente(ID_DatosUsuario,Usuario,Contraseña,Rol,Activa ) 
 values(38,,'123456',100,'S'),
 (39,,'123456',100,'S'),
@@ -201,7 +205,7 @@ UPDATE Medico
 SET Especialidadid = CAST(Especialidad AS INT);
 
 -- Eliminar la columna original
-update Medico SET Especialidad 
+update Medico SET Especialidadid=402 where ID_medico=126 
 
 ALTER TABLE pacientes
 DROP COLUMN Telefono;
@@ -241,6 +245,8 @@ values(37,'044541268'),
     (46,'045568135');
 	insert into TelefonosPacientes(ID_Paciente ,NumeroTelefono)
 values(46,'026338777');
+insert into TelefonosPacientes(ID_Paciente ,NumeroTelefono)
+values(47,'026985977');
 
 -------TABLAS MEDICO-------
 
@@ -265,6 +271,7 @@ select*from Medico
 delete from Medico
 select*from Ubicacion*/
 /*delete from Medico*/
+select*from medico
 
 ------INGRESO USUARIO MEDICO----
 insert into  medico (CodigoMedico,Cedula,Nombres,Apellidos, Especialidad,NumCelular,Telefono,DireccionDomicilio,UbicacionDisp,Genero,CorreoElectronico )
@@ -478,19 +485,34 @@ VALUES
 
 select*from Citas_Medicas;
 
+create table EstadoHoraCitas(
+ID_Estadhocita INT PRIMARY KEY identity (001,1),
+Disponibilidad varchar(50)
 
+);
+insert into EstadoHoraCitas (Disponibilidad) 
+values('Disponible'),
+('Ocupado'),
+('Terminado')
 create table HorariosCitas(
 ID_HORARIO  INT PRIMARY KEY identity (0001,1),
 ID_Doctor int,
 Areas int,
 FechaHora datetime,
-Disponibilidad char(1),
+Disponibeid int,
  constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico),
 constraint Areahfk FOREIGN KEY (Areas) REFERENCES Areas(ID_Areas)
+alter table HorariosCitas add constraint Disponifk FOREIGN KEY (Disponibeid) REFERENCES EstadoHoraCitas(ID_Estadhocita)
 );
 
+select*from MotivosCitasMedicas
+select*from HorariosCitas 
 
 
+
+select*from EstadoHoraCitas
+select*from HorariosCitas
+update HorariosCitas set Disponibeid=1 where Disponibilidad='S';
 		SELECT 
         m.Nombres+' '+ m.Apellidos as Doctor,
 		m.Especialidad,
@@ -521,8 +543,10 @@ select*from Medico*/
 insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
 values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13:00','S')
 ,(22,5,'22/11/23 11:00','S'),(23,3,'18/11/23 10:30','S');*/
-
-update HorariosCitas set Disponibilidad ='T' WHERE ID_HORARIO=15
+select*from HorariosCitas
+select*from EstadoHoraCitas
+select*from Citas_Medicas
+update HorariosCitas set Disponibeid=1 WHERE ID_HORARIO=18
 insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
 values(126,28,'21/11/23 07:30','S'),(127,29,'21/11/23 16:30','S')
 ,(130,32,'22/11/23 16:30','S'),
@@ -579,13 +603,12 @@ SELECT*FROM Historial_Medico
 -- Ingresar datos en la tabla de Pacientes
 
 SELECT
- pacientes.Apellidos AS APELLIDO_Paciente,
-    Medico.Apellidos AS APELLIDO_Medico,
+ pacientes.Apellidos+''+pacientes.Nombres AS NombreCompleto,
+    Medico.Apellidos+' '+Medico.Nombres AS Medico,
     Historial_Medico.Sintomas,
     Historial_Medico.Diagnostico,
     Historial_Medico.Tratamiento,
     Historial_Medico.Receta,
- 
 	HorariosCitas.FechaHora AS FechaCitaMedica
 
 FROM
@@ -595,7 +618,8 @@ INNER JOIN
 INNER JOIN
     Medico ON Historial_Medico.ID_Medico = Medico.ID_Medico
 	
-inner join HorariosCitas on HorariosCitas.ID_HORARIO=Historial_Medico.FechaVisita;
+inner join HorariosCitas on HorariosCitas.ID_HORARIO=Historial_Medico.FechaVisita
+where Historial_Medico.ID_Paciente=37
 
 SELECT*FROM HorariosCitas
 SELECT*FROM Citas_Medicas
@@ -730,7 +754,7 @@ FROM
    MotivosCitasMedicas ON Factura.Motivo = MotivosCitasMedicas.IDMotivo
  inner JOIN
   CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
-  WHERE pacientes.ID_PACIENTE=40;
+  WHERE pacientes.ID_PACIENTE=37;
 
   select*from MetodoPago
 	create table MetodoPago(

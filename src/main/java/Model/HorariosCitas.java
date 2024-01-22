@@ -11,13 +11,14 @@ import java.util.Date;
  * @author angeldvvp
  */
 public class HorariosCitas {
-    String Doctor; String Especialidad;String Area,  Direccion; Date FechaHora; char Disponible;
+    String Doctor; String Especialidad;String Area,  Direccion; Date FechaHora; String  Disponible;
     int idHorario=0; int idMedico=0;
     public HorariosCitas(){
         
     }
     
-    public HorariosCitas(int idHorario,int idMedico,String Doctor,String Especialidad,String Area, Date FechaHora, String Direccion,char Disponible){
+    public HorariosCitas(int idHorario,int idMedico,String Doctor,String Especialidad,
+            String Area, Date FechaHora, String Direccion,String Disponible){
        this.idHorario= idHorario;
        this.idHorario=idHorario;
         this.Doctor=Doctor;
@@ -86,11 +87,11 @@ public class HorariosCitas {
         this.FechaHora = FechaHora;
     }
 
-    public char getDisponible() {
+    public String  getDisponible() {
         return Disponible;
     }
 
-    public void setDisponible(char Disponible) {
+    public void setDisponible(String   Disponible) {
         this.Disponible = Disponible;
     }
     

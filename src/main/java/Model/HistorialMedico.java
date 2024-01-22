@@ -13,17 +13,17 @@ import java.util.Date;
  * @author angeldvvp
  */
 public class HistorialMedico {
-    int idPaciente;int idmedico;Date FechaVisita; String Sintomas; String Diagnostico; 
+    String Paciente; String medico;Date FechaVisita; String Sintomas; String Diagnostico; 
            String Tratamiento; String Receta;
     
     public void HistorialMedico(){
         
     }
-   public void HistorialMedico(int idPaciente,int idmedico,Date FechaVisita, String Sintomas, String Diagnostico, 
+   public void HistorialMedico(String Paciente,String medico,Date FechaVisita, String Sintomas, String Diagnostico, 
            String Tratamiento, String Receta){
         
-          this.idPaciente=idPaciente;
-          this.idmedico=idmedico;
+          this.Paciente=Paciente;
+          this.medico=medico;
           this.FechaVisita=FechaVisita;
           this.Sintomas=Sintomas;
           this.Diagnostico=Diagnostico;
@@ -31,21 +31,23 @@ public class HistorialMedico {
           this.Receta=Receta;
     }
 
-    public int getIdPaciente() {
-        return idPaciente;
+    public String getPaciente() {
+        return Paciente;
     }
 
-    public void setIdPaciente(int idPaciente) {
-        this.idPaciente = idPaciente;
+    public void setPaciente(String Paciente) {
+        this.Paciente = Paciente;
     }
 
-    public int getIdmedico() {
-        return idmedico;
+    public String getMedico() {
+        return medico;
     }
 
-    public void setIdmedico(int idmedico) {
-        this.idmedico = idmedico;
+    public void setMedico(String medico) {
+        this.medico = medico;
     }
+
+ 
 
     public Date getFechaVisita() {
         return FechaVisita;

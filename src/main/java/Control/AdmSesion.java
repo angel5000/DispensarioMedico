@@ -46,6 +46,32 @@ public class AdmSesion {
         return userID;
     }
     
-    
+      public int IniciarSesionMed(String Usuario, String Contraseña){
+        
+         String query = "{CALL VerificarUsuarioMed(?,?,?)}";
+          
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+            CallableStatement stmt = conn.prepareCall(query);
+             ) {
+            stmt.setString(1,  Usuario); // Reemplaza con el nombre de usuario
+                stmt.setString(2, Contraseña);
+           stmt.registerOutParameter(3, Types.INTEGER);
+
+                stmt.execute();
+
+               
+                userID = stmt.getInt(3);
+          ResultSet rs = stmt.executeQuery();
+            if (userID > 0) {
+                    System.out.println("Usuario autenticado. ID del Usuario: " + userID);
+                } else {
+                    System.out.println("Usuario o contraseña incorrectos");
+                }
+        
+        }catch(SQLException e){
+                e.getStackTrace();
+            }
+        return userID;
+    }
     
 }

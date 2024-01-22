@@ -47,7 +47,7 @@ public class Motivos {
 
     @Override
     public String toString() {
-        return motivos;
+        return motivos+" $"+Costo;
     }
     
 }

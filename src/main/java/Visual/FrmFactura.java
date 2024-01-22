@@ -54,7 +54,8 @@ public class FrmFactura extends javax.swing.JFrame {
 agregarColumn = tbfac.getColumnModel().getColumn(5);
 agregarColumn.setCellEditor(new myeditor(tbfac));
 agregarColumn.setCellRenderer(new myrenderer(true));
-        
+
+       
     }
 
     private FrmFactura() {
@@ -77,6 +78,7 @@ agregarColumn.setCellRenderer(new myrenderer(true));
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(280, 80));
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalles Factura"));

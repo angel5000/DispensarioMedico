@@ -43,6 +43,7 @@ public class Login extends javax.swing.JFrame {
         txtusu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(340, 100));
 
         jPanel1.setBackground(new java.awt.Color(249, 249, 219));
 

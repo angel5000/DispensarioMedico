@@ -16,7 +16,12 @@ public class Usuario  {
         
         
     }
-    
+     public Usuario(String Nombres, String Apellidos,String Cedula){
+          this.Nombres = Nombres;
+        this.Apellidos = Apellidos;
+        this.Cedula = Cedula;
+     
+    }
     public Usuario(String Nombres, String Apellidos,String Cedula,String FechaNacimiento, String Provincia,String Direccion,
    String Telefono,String NumCelular,String Canton, char Genero,String CorreoElectronico){
           this.Nombres = Nombres;

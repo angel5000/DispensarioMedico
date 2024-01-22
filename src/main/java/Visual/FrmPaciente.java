@@ -70,7 +70,7 @@ public class FrmPaciente extends javax.swing.JFrame {
         lbmsj.setText("");
  DatosPaciente(pc);
  
- 
+
 
  AdmEspecialidad aes = new AdmEspecialidad();
  aes.getEspecialidad(cbespe);
@@ -127,6 +127,8 @@ paneles.setEnabledAt(2, false);
     private FrmPaciente() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+   
                      
     /**
      * This method is called from within the constructor to initialize the form.
@@ -199,13 +201,14 @@ paneles.setEnabledAt(2, false);
         jPanel2 = new javax.swing.JPanel();
         btperfil = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
+        lbnomb = new javax.swing.JLabel();
         bthistorial = new javax.swing.JButton();
         btfacturas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Citas Medicas");
         setBackground(new java.awt.Color(255, 255, 255));
+        setLocation(new java.awt.Point(80, 20));
         setResizable(false);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -346,9 +349,7 @@ paneles.setEnabledAt(2, false);
                                 .addComponent(txtcedula, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(128, 128, 128)
                                 .addComponent(jLabel10))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtnomb, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)))
+                            .addComponent(txtnomb, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -391,7 +392,6 @@ paneles.setEnabledAt(2, false);
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cbgenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16))))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(CBprovincias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -485,6 +485,11 @@ paneles.setEnabledAt(2, false);
         jLabel22.setText("Sector:");
 
         cbsector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Norte", "Sur" }));
+        cbsector.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbsectorItemStateChanged(evt);
+            }
+        });
 
         btmotv.setText("?");
         btmotv.addActionListener(new java.awt.event.ActionListener() {
@@ -524,7 +529,7 @@ paneles.setEnabledAt(2, false);
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btmotv)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbmt, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbmt, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jp2Layout.createSequentialGroup()
                 .addGroup(jp2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -676,16 +681,26 @@ paneles.setEnabledAt(2, false);
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
         btperfil.setBackground(new java.awt.Color(204, 204, 255));
-        btperfil.setText("Perfil");
+        btperfil.setText("Cerrar Sesion");
         btperfil.setBorder(null);
+        btperfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btperfilActionPerformed(evt);
+            }
+        });
 
         jLabel17.setText("Usuario:");
 
-        jLabel20.setText("NombUSu");
+        lbnomb.setText("NombUSu");
 
         bthistorial.setBackground(new java.awt.Color(204, 204, 255));
         bthistorial.setText("Historial Medico");
         bthistorial.setBorder(null);
+        bthistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bthistorialActionPerformed(evt);
+            }
+        });
 
         btfacturas.setBackground(new java.awt.Color(204, 204, 255));
         btfacturas.setText("Facturas");
@@ -704,7 +719,7 @@ paneles.setEnabledAt(2, false);
                 .addGap(15, 15, 15)
                 .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel20)
+                .addComponent(lbnomb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(bthistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(121, 121, 121)
@@ -723,7 +738,7 @@ paneles.setEnabledAt(2, false);
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btperfil, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17)
-                    .addComponent(jLabel20)
+                    .addComponent(lbnomb)
                     .addComponent(bthistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -854,7 +869,7 @@ paneles.setEnabledAt(2, false);
                   txtape.setText(dt.getApellidos());
                   txtnumcel.setText(dt.getNumCelular());
                  txtpanedir.setText(dt.getDireccion());
-               
+               lbnomb.setText(dt.getNombres()+" "+dt.getApellidos());
                    if(dt.getGenero()=='M'){
                         cbgenero.setSelectedIndex(0);
                    }else{
@@ -886,7 +901,7 @@ paneles.setEnabledAt(2, false);
         
     }
     
-    public void HorariosCitas(String disponi, String ubi, String espe) throws Excepciones{
+    public void HorariosCitas(int disponi, String ubi, String espe) throws Excepciones{
         
         
     
@@ -898,7 +913,7 @@ try{
                 
                String fecha=formatoFecha.format(dt.getFechaHora());
                 TB.addRow(new Object[]{dt.getIdHorario(),dt.getIdMedico(),dt.getDoctor(),dt.getSpecialidad(),fecha,dt.getDireccion(),
-                    dt.getArea(),String.valueOf(dt.getDisponible())});
+                    dt.getArea(),dt.getDisponible()});
               /*  int tamaño = tamañofila( tbfac.getFont());
        tbfac.setRowHeight(tamaño);*/
 
@@ -949,13 +964,19 @@ try{
     }//GEN-LAST:event_btmotvActionPerformed
 
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
+if(cbsector.getSelectedIndex()==0){
+          JOptionPane.showMessageDialog(null, "SELECCIONA EL SECTOR DEL DISPENSARIO");
+            
+       }else{
+
         try {
-            HorariosCitas("S", cbsector.getSelectedItem().toString(), cbespe.getSelectedItem().toString());
+            HorariosCitas(1, cbsector.getSelectedItem().toString(), cbespe.getSelectedItem().toString());
             // TODO add your handling code here:
         } catch (Excepciones ex) {
             Logger.getLogger(FrmPaciente.class.getName()).log(Level.SEVERE, null, ex);
         }
         lbmsj.setText("");
+}
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void cbgeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbgeneroActionPerformed
@@ -1008,6 +1029,7 @@ int idpago=0;
     private void btpagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpagarActionPerformed
 float iva=0.12f,subtotal =Costo*iva, total=subtotal+Costo;
         Generarfactura gf = new Generarfactura();
+        AdmHorariosCitas cth = new AdmHorariosCitas();
 AdmFactura aft = new AdmFactura();
    if(rddebi.isSelected()){idpago=300;} 
 if(rdpaypal.isSelected()){idpago=301;}
@@ -1024,6 +1046,7 @@ if(rdtransfer.isSelected()){idpago=302;}
             ct.IngresarCita(idpaciente, idmedic,horario , idmotivo);
             aft.CrearFactura(idpaciente, idmedic, horario, idmotivo, iva,subtotal ,total,Costo);
             gf.GenerarFactura(idpaciente);
+            cth.SetHorariOcupado(horario,3);
          JOptionPane.showMessageDialog(null, "PAGO REALIZADO- CITA MEDICA AGENDADA- FACTURA GENERADA REVISAR SECCION FACTURAS");
             
              }else{
@@ -1063,6 +1086,30 @@ int id = sp.getId();System.out.println(id+" idmt2");
         
         
     }//GEN-LAST:event_cbespeItemStateChanged
+
+    private void bthistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bthistorialActionPerformed
+       FrmHistorialMedico fhm;
+         try {
+             fhm = new FrmHistorialMedico(idpaciente);
+              fhm.setVisible(true);
+         } catch (SQLException ex) {
+             Logger.getLogger(FrmPaciente.class.getName()).log(Level.SEVERE, null, ex);
+         }
+      
+    }//GEN-LAST:event_bthistorialActionPerformed
+
+    private void cbsectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbsectorItemStateChanged
+      
+       
+       
+    }//GEN-LAST:event_cbsectorItemStateChanged
+
+    private void btperfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btperfilActionPerformed
+        this.setVisible(false);
+        JOptionPane.showMessageDialog(null, "SESION CERRADA");
+        Login l = new Login();
+        l.setVisible(true);
+    }//GEN-LAST:event_btperfilActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1129,7 +1176,6 @@ int id = sp.getId();System.out.println(id+" idmt2");
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel24;
@@ -1152,6 +1198,7 @@ int id = sp.getId();System.out.println(id+" idmt2");
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPanel jp2;
     private javax.swing.JLabel lbmsj;
+    private javax.swing.JLabel lbnomb;
     private javax.swing.JTabbedPane paneles;
     private javax.swing.JRadioButton rdcredi;
     private javax.swing.JRadioButton rddebi;

@@ -63,10 +63,10 @@ public class AdmFactura {
            // Paciente pc = new Paciente();
            // Doctor mc = new Doctor();
               //GestorUsuarios gu= new GestorUsuarios();
-              Factura  ft = new Factura();
+              
  ResultSet rs = stmt.executeQuery(); 
             while (rs.next()) {//RECORRIDO DE DATOS
-               
+               Factura  ft = new Factura();
                 ft.setCodigoFactura(rs.getInt("ID_Factura"));
                ft.setNombres(rs.getString("Nombres"));
                ft.setApellidos(rs.getString("Apellidos"));
@@ -76,15 +76,16 @@ public class AdmFactura {
                  ft.setCanton(rs.getString("Canton"));
                  ft.setEspecialidad(rs.getString("Especialidad"));
                  ft.setMotivos(rs.getString("Motivo_de_Cita"));
+                
               ft.setCosto(rs.getFloat("Costos"));
               ft.setIva(rs.getFloat("Iva"));
               ft.setApellidoDoc(rs.getString("ApellidoDoctor"));
               ft.setTotal(rs.getFloat("Total"));
               ft.setSubtotal(rs.getFloat("Subtotal"));
               ft.setDescuento(rs.getFloat("Descuentos"));
-            
-            }
               factura.add(ft);
+            }
+            
              
             
            

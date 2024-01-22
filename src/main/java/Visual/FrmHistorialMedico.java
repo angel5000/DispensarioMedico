@@ -4,6 +4,19 @@
  */
 package Visual;
 
+import Control.AdmFactura;
+import Control.AdmHistMedico;
+import Model.Factura;
+import Model.HistorialMedico;
+import java.awt.Font;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angeldvvp
@@ -12,9 +25,56 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmHistorialMedico
-     */
-    public FrmHistorialMedico() {
+     */int idpaciente;
+    public FrmHistorialMedico(int idp) throws SQLException {
         initComponents();
+        idpaciente=idp;
+        ListarHistorialMed(idpaciente);
+        
+         tbhisto.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+      tbhisto.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    // Obtener la fila seleccionada
+                    int selectedRow = tbhisto.getSelectedRow();
+
+                    // Verificar si hay una fila seleccionada
+                    if (selectedRow != -1) {
+                        // Obtener los valores de las celdas en la fila seleccionada
+                         txardetal.setText("");
+                        Object paciente=tbhisto.getValueAt(selectedRow, 0);
+                       Object doctor=tbhisto.getValueAt(selectedRow, 1);
+                       Object sintomas=tbhisto.getValueAt(selectedRow, 2);
+                       Object diagnos=tbhisto.getValueAt(selectedRow, 3);
+                       Object receta=tbhisto.getValueAt(selectedRow, 4);
+                       Object agenda=tbhisto.getValueAt(selectedRow, 5);
+                       
+                     txardetal.append("**********************HISTORIAL MEDICO***************"
+                             + "*****************\n"+"FECHA CITA MEDICA:"+agenda+
+                             "NOMBRE DEL PACIENTE:"+paciente+"\n NOMBRE DEL DOCTOR: "+doctor+"\n"+
+                             "SINTOMAS: "+sintomas+"\n DIAGNOSTICO: "+diagnos+"\nRECETA: "+receta
+                                     +"\n*******"
+                             + "********************"
+                             + "*****************************".toUpperCase());
+                     
+                       
+                    }
+                }
+               // lbmsj.setText("");
+            }
+        });
+        
+        
+        
+        
+        
+        
+    }
+
+    private FrmHistorialMedico() {
+      
     }
 
     /**
@@ -29,33 +89,34 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbfac = new javax.swing.JTable();
+        tbhisto = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txardetal = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(280, 130));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 0, 24)); // NOI18N
         jLabel1.setText("hISTORIAL MEDICO");
 
-        tbfac.setFont(new java.awt.Font("Perpetua", 0, 18)); // NOI18N
-        tbfac.setModel(new javax.swing.table.DefaultTableModel(
+        tbhisto.setFont(new java.awt.Font("Perpetua", 0, 18)); // NOI18N
+        tbhisto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo Hist.Medico", "Nombre Completo", "Sintomas", "Diagnostico", "Receta", "Agendado"
+                "Nombre Completo", "Doctor", "Sintomas", "Diagnostico", "Receta", "Agendado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, true, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -66,23 +127,27 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tbfac);
-        if (tbfac.getColumnModel().getColumnCount() > 0) {
-            tbfac.getColumnModel().getColumn(0).setPreferredWidth(20);
-            tbfac.getColumnModel().getColumn(1).setPreferredWidth(120);
-            tbfac.getColumnModel().getColumn(2).setPreferredWidth(120);
-            tbfac.getColumnModel().getColumn(3).setPreferredWidth(120);
-            tbfac.getColumnModel().getColumn(4).setPreferredWidth(120);
+        jScrollPane1.setViewportView(tbhisto);
+        if (tbhisto.getColumnModel().getColumnCount() > 0) {
+            tbhisto.getColumnModel().getColumn(0).setPreferredWidth(120);
+            tbhisto.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tbhisto.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tbhisto.getColumnModel().getColumn(4).setPreferredWidth(120);
         }
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txardetal.setColumns(20);
+        txardetal.setRows(5);
+        jScrollPane2.setViewportView(txardetal);
 
         jLabel2.setText("Detalles:");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Cerrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -91,17 +156,18 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
             .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(17, 17, 17)
-                            .addComponent(jLabel2))))
-                .addContainerGap(299, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel2)))
+                        .addGap(318, 318, 318)))
+                .addContainerGap(382, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,7 +189,9 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,6 +203,35 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+public void ListarHistorialMed(int idpaciente) throws SQLException{
+    DefaultTableModel TB = (DefaultTableModel)  tbhisto.getModel();
+       TB.setRowCount(0);
+    AdmHistMedico hm = new AdmHistMedico();
+   SimpleDateFormat formatter =new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+       
+    for(HistorialMedico dt : hm.getHistorial(idpaciente)){
+          String fecha= formatter.format(dt.getFechaVisita());
+                TB.addRow(new Object[]{dt.getPaciente(),dt.getMedico(),dt.getSintomas(),dt.getDiagnostico()
+                ,dt.getReceta(),fecha});
+                int tamaño = tamañofila( tbhisto.getFont());
+       tbhisto.setRowHeight(tamaño);
+      TB.fireTableDataChanged();
+            }
+
+    
+
+}
+
+ private int tamañofila(Font font) {
+        
+        int incrementa = 6;
+        return font.getSize() + incrementa;
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -177,7 +274,7 @@ public class FrmHistorialMedico extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTable tbfac;
+    private javax.swing.JTable tbhisto;
+    private javax.swing.JTextArea txardetal;
     // End of variables declaration//GEN-END:variables
 }

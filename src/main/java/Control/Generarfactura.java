@@ -45,7 +45,7 @@ img.setHeight(100);
 img.setMarginTop(5);
 document.add(img);
  LocalDateTime ahora = LocalDateTime.now();
-
+ 
         // Formatear la fecha y hora como un String
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String fechaHoraActual = ahora.format(formatter);
@@ -53,7 +53,7 @@ document.add(img);
     +"Fecha emision: "+fechaHoraActual+"\n"+"Codigo Factura: "+dt.getCodigoFactura()+"\nNombres y Apellidos del Paciente:"+dt.getNombres()+" "+dt.getApellidos()
     +"\nCedula: "+dt.getCedula()+"\nProvincia: "+dt.getProvincia()+"\nCanton: "+dt.getCanton()+
            "Nombres y Apellidos del Doctor: "+dt.getApellidoDoc()
-    +"\nEspecilidad del medico: "+dt.getEspecialidad()+"\nFecha Visita: 19/11/23 17:00"+"\nMotivo de la cita: "+dt.getMotivos()
+    +"\nEspecilidad del medico: "+dt.getEspecialidad()+"\nMotivo de la cita: "+dt.getMotivos()
     +"\nCosto: $"+dt.getCosto()+"\nDescuento: %"+dt.getDescuento()+"\nIva: %"+dt.getIva()+
             "\nSubtotal: $"+dt.getSubtotal()+"\nTotal: $"+dt.getTotal()+"\n**********GRACIAS POR SU VISITA***** "
     ).setFontSize(12));
