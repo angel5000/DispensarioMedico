@@ -36,7 +36,7 @@ public class AdmPaciente {
                pct.setProvincia(rs.getString("Provincia"));
                 pct.setDireccion(rs.getString("Direccion"));
                  pct.setCanton(rs.getString("Canton"));
-                 // pct.setTelefono(rs.getString("Telefono"));
+                
                   genero=rs.getString("Genero").charAt(0);
                   pct.setGenero(genero);
                   pct.setCorreoElectronico(rs.getString("CorreoElectronico"));
@@ -50,7 +50,7 @@ public class AdmPaciente {
             pacientes.add(pct);
            
             }catch(SQLException e){
-               // e.getStackTrace();
+           
                 System.out.println(e.getMessage()+e.getStackTrace());
             }
         return pacientes;
@@ -75,9 +75,40 @@ public class AdmPaciente {
            
            
             }catch(SQLException e){
-               // e.getStackTrace();
-                System.out.println(e.getMessage()+e.getStackTrace());
+              
+                System.out.println(e.getMessage());
             }
         return TLpaciente;
      }
+    public boolean updpaciente(int idpaciente, String Nombres, String Apellidos,String FechaNacimiento, String Provincia,String Direccion,
+   String Canton, char Genero){
+        
+       String query="{CALL ActualizarPaciente(?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+              CallableStatement stmt = conn.prepareCall(query);
+             ) {
+          
+            stmt.setInt(1, idpaciente);
+             stmt.setString(2, Nombres);
+           stmt.setString(3, Apellidos);
+           stmt.setString(4, FechaNacimiento);
+            stmt.setString(5, Provincia);
+            stmt.setString(6,  Canton);
+              stmt.setString(7,Direccion);
+                stmt.setString(8, String.valueOf(Genero));
+          stmt.execute();
+            }catch(SQLException e){
+              
+               
+                System.out.println(e.getMessage()+e.getStackTrace());
+            }
+        
+        
+        
+        return true;
+    }
+    
+    
+    
+    
 }

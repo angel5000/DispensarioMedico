@@ -31,13 +31,20 @@ public class FrmDoctor extends javax.swing.JFrame {
     AdmCitasMedicas cm = new AdmCitasMedicas();
     int ID=0, IDCITA=0,IDPACIENTE=0, IDHORARIO=0;int Estado=3;
     int idmed=0;
-    String  sintomas, diagnostico, tratamiento, receta;
+    String  sintomas, diagnostico, tratamiento, receta,Dispo="";
     Doctor dc;
     public FrmDoctor(Doctor med) {
         initComponents();
         dc=med;
         idmed=dc.getIdDoctor();
         lbdocnom.setText(dc.getNombresdoc());
+         pnelhisto.setEnabled(false);
+         btingrehisto.setEnabled(false);
+         btlimpcamp.setEnabled(false);
+         txtreceta.setEnabled(false);
+         txtdiag.setEnabled(false);
+          txtsint.setEnabled(false);
+           txttrata.setEnabled(false);
        Listar();
          tbdocct.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -54,8 +61,9 @@ public class FrmDoctor extends javax.swing.JFrame {
                         // txardetal.setText("");
                         Object idcita=tbdocct.getValueAt(selectedRow, 0);
                          Object estado=tbdocct.getValueAt(selectedRow, 4);
+                         Dispo=estado.toString();
                          int id = ((Number) idcita).intValue();
-                        selectindex( id);
+                        selectindex( id,Dispo);
                      
                   /*     
                      
@@ -68,7 +76,24 @@ public class FrmDoctor extends javax.swing.JFrame {
      
     }
 
-    public void selectindex(int id){
+    public void selectindex(int id, String dispo){
+        if(dispo.equals("Terminado")){
+            pnelhisto.setEnabled(false);
+            btingrehisto.setEnabled(false);
+         btlimpcamp.setEnabled(false);
+         txtreceta.setEnabled(false);
+         txtdiag.setEnabled(false);
+          txtsint.setEnabled(false);
+           txttrata.setEnabled(false);
+        }else{
+             pnelhisto.setEnabled(true);
+             pnelhisto.setEnabled(true);
+         btingrehisto.setEnabled(true);
+         btlimpcamp.setEnabled(true);
+         txtreceta.setEnabled(true);
+         txtdiag.setEnabled(true);
+          txtsint.setEnabled(true);
+           txttrata.setEnabled(true);
         txtareadet.setText("");
           System.out.println(id+""+cm.MostrarDetCitas(id));
                          for(CitasMedicas dt: cm.MostrarDetCitas(id)){
@@ -88,7 +113,7 @@ public class FrmDoctor extends javax.swing.JFrame {
                              + "*****************************".toUpperCase());
                              
                          }
-            
+        }
     }
     
     private FrmDoctor() {
@@ -143,29 +168,26 @@ public void Listar() {
         jPanel7 = new javax.swing.JPanel();
         jScrollPane15 = new javax.swing.JScrollPane();
         tbdocct = new javax.swing.JTable();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        jScrollPane19 = new javax.swing.JScrollPane();
-        txtreceta = new javax.swing.JTextPane();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jScrollPane20 = new javax.swing.JScrollPane();
-        txttrata = new javax.swing.JTextPane();
-        btingrehisto = new javax.swing.JButton();
-        jScrollPane18 = new javax.swing.JScrollPane();
-        txtsint = new javax.swing.JTextPane();
-        jScrollPane17 = new javax.swing.JScrollPane();
-        txtdiag = new javax.swing.JTextPane();
-        jLabel19 = new javax.swing.JLabel();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        btingrehisto5 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
         lbidpac = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtareadet = new javax.swing.JTextArea();
+        pnelhisto = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jScrollPane17 = new javax.swing.JScrollPane();
+        txtdiag = new javax.swing.JTextPane();
+        jScrollPane20 = new javax.swing.JScrollPane();
+        txttrata = new javax.swing.JTextPane();
+        btingrehisto = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        jScrollPane18 = new javax.swing.JScrollPane();
+        txtsint = new javax.swing.JTextPane();
+        jScrollPane19 = new javax.swing.JScrollPane();
+        txtreceta = new javax.swing.JTextPane();
+        jLabel20 = new javax.swing.JLabel();
+        btlimpcamp = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
         btsesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -216,58 +238,7 @@ public void Listar() {
         });
         jScrollPane15.setViewportView(tbdocct);
 
-        jLabel20.setText("Sintomas:");
-
-        jLabel21.setText("Diagnostico:");
-
-        jScrollPane19.setViewportView(txtreceta);
-
-        jLabel22.setText("Tratamiento:");
-
-        jLabel23.setText("Receta:");
-
-        jScrollPane20.setViewportView(txttrata);
-
-        btingrehisto.setText("Ingresar Historial Medico");
-        btingrehisto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btingrehistoActionPerformed(evt);
-            }
-        });
-
-        jScrollPane18.setViewportView(txtsint);
-
-        jScrollPane17.setViewportView(txtdiag);
-
-        jLabel19.setText("Marcar estado de la cita:");
-
-        buttonGroup1.add(jRadioButton7);
-        jRadioButton7.setSelected(true);
-        jRadioButton7.setText("TERMINADA");
-        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton7ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton8);
-        jRadioButton8.setText("OCUPADO");
-        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton8ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton9);
-        jRadioButton9.setText("DISPONIBLE");
-        jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton9ActionPerformed(evt);
-            }
-        });
-
-        btingrehisto5.setText("Limpia Campos");
-
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalles"));
 
         jLabel24.setText("Paciente:");
@@ -304,91 +275,115 @@ public void Listar() {
                 .addContainerGap())
         );
 
+        pnelhisto.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingresar Historial"));
+
+        jLabel23.setText("Receta:");
+
+        jScrollPane17.setViewportView(txtdiag);
+
+        jScrollPane20.setViewportView(txttrata);
+
+        btingrehisto.setText("Ingresar Historial Medico");
+        btingrehisto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btingrehistoActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("Diagnostico:");
+
+        jScrollPane18.setViewportView(txtsint);
+
+        jScrollPane19.setViewportView(txtreceta);
+
+        jLabel20.setText("Sintomas:");
+
+        btlimpcamp.setText("Limpia Campos");
+
+        jLabel22.setText("Tratamiento:");
+
+        javax.swing.GroupLayout pnelhistoLayout = new javax.swing.GroupLayout(pnelhisto);
+        pnelhisto.setLayout(pnelhistoLayout);
+        pnelhistoLayout.setHorizontalGroup(
+            pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnelhistoLayout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel22)
+                    .addGroup(pnelhistoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btingrehisto)
+                        .addGap(48, 48, 48)
+                        .addComponent(btlimpcamp, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnelhistoLayout.createSequentialGroup()
+                        .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel23))
+                        .addGap(37, 37, 37)
+                        .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21)
+                            .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel20))))
+                .addGap(183, 183, 183))
+        );
+        pnelhistoLayout.setVerticalGroup(
+            pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnelhistoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane17)
+                        .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel22)
+                .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnelhistoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnelhistoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btingrehisto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btlimpcamp, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37))
+                    .addGroup(pnelhistoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel22))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel23))
-                                .addGap(37, 37, 37)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel21)
-                                    .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(234, 234, 234)))
+                .addContainerGap()
+                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 998, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jRadioButton7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton8)
-                        .addGap(16, 16, 16)
-                        .addComponent(jRadioButton9))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(btingrehisto)
-                        .addGap(41, 41, 41)
-                        .addComponent(btingrehisto5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 998, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(518, 518, 518))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnelhisto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1086, 1086, 1086))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel20))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane17)
-                            .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton7)
-                            .addComponent(jRadioButton8)
-                            .addComponent(jRadioButton9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btingrehisto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btingrehisto5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane20)))
-                .addGap(22, 22, 22))
+                .addComponent(pnelhisto, javax.swing.GroupLayout.PREFERRED_SIZE, 253, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jScrollPane2.setViewportView(jPanel7);
@@ -405,10 +400,6 @@ public void Listar() {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
@@ -423,9 +414,10 @@ public void Listar() {
                         .addComponent(lbdocnom)))
                 .addGap(36, 36, 36)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 566, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1012, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +438,7 @@ public void Listar() {
                             .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -454,17 +446,15 @@ public void Listar() {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
 
         pack();
@@ -480,18 +470,6 @@ public void Listar() {
         JOptionPane.showMessageDialog(null,"HISTORIAL INGRESADO - CITA REGISTRADA" );
         
     }//GEN-LAST:event_btingrehistoActionPerformed
-
-    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
-        Estado=3;
-    }//GEN-LAST:event_jRadioButton7ActionPerformed
-
-    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
-     Estado=1;
-    }//GEN-LAST:event_jRadioButton9ActionPerformed
-
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
-        Estado=2;
-    }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void btsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btsesionActionPerformed
         this.setVisible(false);
@@ -514,12 +492,14 @@ public void Listar() {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
+             javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel" );
+            /*
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
+            }*/
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FrmDoctor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -542,11 +522,10 @@ public void Listar() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btingrehisto;
-    private javax.swing.JButton btingrehisto5;
+    private javax.swing.JButton btlimpcamp;
     private javax.swing.JButton btsesion;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -558,9 +537,6 @@ public void Listar() {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane17;
@@ -570,6 +546,7 @@ public void Listar() {
     private javax.swing.JScrollPane jScrollPane20;
     private javax.swing.JLabel lbdocnom;
     private javax.swing.JLabel lbidpac;
+    private javax.swing.JPanel pnelhisto;
     private javax.swing.JTable tbdocct;
     private javax.swing.JTextArea txtareadet;
     private javax.swing.JTextPane txtdiag;

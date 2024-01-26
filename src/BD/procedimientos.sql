@@ -20,6 +20,49 @@ BEGIN
 END;
 
 
+
+
+CREATE PROCEDURE ActualizarPaciente
+    @IDPaciente INT,
+    @Nombres VARCHAR(50),
+    @Apellidos VARCHAR(50),
+    @FechaNacimiento VARCHAR(10),
+    @Provincia VARCHAR(50),
+    @Canton VARCHAR(50),
+    @Direccion VARCHAR(50),
+    @Genero VARCHAR(100)
+
+AS
+BEGIN
+    UPDATE pacientes
+    SET
+        Nombres = @Nombres,
+        Apellidos = @Apellidos,
+        Fecha_nacimiento = @FechaNacimiento,
+        Provincia = @Provincia,
+        Canton = @Canton,
+        Direccion = @Direccion,
+        Genero = @Genero
+    WHERE
+        ID_PACIENTE = @IDPaciente;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 create PROCEDURE ListaEspecialidad
    
 AS
@@ -88,27 +131,29 @@ BEGIN
         PRINT 'Usuario o contraseña incorrectos';
 
 END;
-
 create PROCEDURE VerificarUsuarioMed
     @Usuario VARCHAR(50),
     @Contrasena VARCHAR(50),
-	@IDUsuario INT OUTPUT
+	@IDUsuario INT OUTPUT,
+	@nombdoc varchar(100) OUTPUT
 
 AS
 BEGIN
     SET NOCOUNT ON;
 
    set @IDUsuario=null;
-
+    set @nombdoc=null;
     -- Verificar si el usuario y contraseña existen
-    SELECT @IDUsuario=IDMedUsuario
-    FROM  UsuariosMedico
+    SELECT @IDUsuario=um.ID_DatosUsuario,@nombdoc=md.Apellidos
+    FROM  UsuariosMedico um 
+	join Medico md on um.ID_DatosUsuario=md.ID_medico
     WHERE  Usuario =@Usuario and HashedContrasena =  HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contrasena);
 
 
     -- Devolver el ID del usuario si existe
     IF @Contrasena IS NOT NULL
-        SELECT @IDUsuario AS 'ID del Usuario';
+        SELECT @IDUsuario AS 'ID del Usuario', @nombdoc AS 'doctor';
+	
     ELSE
         PRINT 'Usuario o contraseña incorrectos';
 
@@ -117,16 +162,17 @@ END;
 
 
 -- Ejecutar el procedimiento almacenado
-
-DECLARE @IDUsuari int ;
-DECLARE  @Usuario int ;
-DECLARE  @Contrasena int ;
+DECLARE @IDUsuario INT;
+DECLARE @Usuario VARCHAR(50) = 'Luis1587'; -- Asigna valores a las variables de entrada
+DECLARE @Contrasena VARCHAR(50) = '123456';
+DECLARE @nombdoc VARCHAR(100);
 
 EXEC VerificarUsuarioMed
-    @Usuario = 'Luis1587',
-    @Contrasena = '123456',
-	 @IDUsuario = @IDUsuari output 
-	
+    @Usuario = @Usuario,
+    @Contrasena = @Contrasena,
+    @IDUsuario = @IDUsuario OUTPUT,
+    @nombdoc = @nombdoc OUTPUT;
+
 
 
 create PROCEDURE GenerarFactura
@@ -148,7 +194,9 @@ BEGIN
 
   
 END;
-
+DECLARE @ID_Esp INT;
+SET @ID_Esp = 400; 
+EXEC ConsultarMotivos @ID_Espe = @ID_Esp;
 create PROCEDURE ConsultarMotivos
  @ID_Espe INT
 AS
@@ -287,10 +335,11 @@ create PROCEDURE CitasMedicasIngresadas
    @IdMedico INT
 AS
 BEGIN
+
 SELECT 
 ct.IDHorarioCitas,
 ct.IDCita,
-ct.IDMedico,
+md.ID_medico,
 ct.IDPaciente,
 pc.Nombres,
 pc.Apellidos,
@@ -300,13 +349,18 @@ sh.Disponibilidad
 
 from Citas_Medicas ct
 join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
-join HorariosCitas hr on ct.IDHorarioCitas=hr.ID_HORARIO
+join Medico md on ct.IDMedico=md.ID_medico
 join MotivosCitasMedicas mt on ct.Motivo=mt.IDMotivo
-join EstadoHoraCitas sh on hr.Disponibeid=sh.ID_Estadhocita
-where ct.IDMedico=@IdMedico;
+join HorariosCitas hr on  ct.IDHorarioCitas= hr.ID_HORARIO
+join EstadoHoraCitas sh on  hr.Disponibeid=sh.ID_Estadhocita
+
+where md.ID_medico= @IdMedico;
 END;
 
-select*from HorariosCitas
+
+update Citas_Medicas set IDHorarioCitas =15 where IDPaciente=37
+select*from Citas_Medicas
+select*from HorariosCitas where ID_Doctor =135
 
 create PROCEDURE DettlCitasMedicas
    @Idcita INT
@@ -335,6 +389,7 @@ join Medico md on ct.IDMedico=md.ID_medico
 where ct.IDCita=@Idcita;
 
 END;
+
 select*from Citas_Medicas
 
 

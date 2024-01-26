@@ -57,7 +57,7 @@ DECLARE @Salt VARBINARY(32);
 SET @Salt = CRYPT_GEN_RANDOM(32); 
 DECLARE @Contraseña NVARCHAR(MAX);
 SET @Contraseña = '123456';
-
+select *from UsuariosMedico
 INSERT INTO UsuariosMedico (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
 VALUES (
     135,
@@ -547,6 +547,8 @@ values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13
 select*from HorariosCitas
 select*from EstadoHoraCitas
 select*from Citas_Medicas
+select*from Historial_Medico
+delete from Historial_Medico where ID_Historial=1216
 update HorariosCitas set Disponibeid=1 WHERE ID_HORARIO=18
 insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
 values(126,28,'21/11/23 07:30','S'),(127,29,'21/11/23 16:30','S')
