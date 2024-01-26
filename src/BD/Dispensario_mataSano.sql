@@ -559,8 +559,18 @@ insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad)
 values(135,33,'22/11/23 13:00','S'),(137,35,'22/11/23 15:00','S')
 ,(136,37,'22/11/23 9:00','S');
 
+insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibeid) 
+values(135,33,'22/01/24 13:00','1');
 
-delete from HorariosCitas where ID_HORARIO =11
+
+select*from Citas_Medicas
+
+SELECT*FROM HorariosCitas;
+SELECT*FROM Factura;
+UPDATE HorariosCitas SET Disponibeid=1
+delete from Citas_Medicas where IDCita =1019;
+delete from Factura where ID_Factura =2220;
+delete from HorariosCitas where ID_HORARIO =22;
 
 create table Areas(
 ID_Areas INT PRIMARY KEY identity (0001,1),
@@ -601,6 +611,7 @@ CREATE TABLE Historial_Medico (
 );
 delete from Historial_Medico
 SELECT*FROM Historial_Medico
+SELECT*FROM HorariosCitas
 -- Ingresar datos en la tabla de Pacientes
 
 SELECT
@@ -622,14 +633,14 @@ INNER JOIN
 inner join HorariosCitas on HorariosCitas.ID_HORARIO=Historial_Medico.FechaVisita
 where Historial_Medico.ID_Paciente=37
 
-SELECT*FROM HorariosCitas
+SELECT*FROM Historial_Medico
 SELECT*FROM Citas_Medicas
 select*from Medico
 select*from pacientes
-delete from Citas_Medicas where IDPaciente=40
+delete from Historial_Medico where ID_Historial=1213
 INSERT INTO Historial_Medico (   ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta) 
 VALUES 
-( 37, 135, 15, 'LE DUELE EL ESTOMAGO', 'DIARREA', 'CUIDADO ESTOMACAL', 'SUERO ORAL');
+( 37, 135, 18, 'LE DUELE EL ESTOMAGO', 'DIARREA', 'CUIDADO ESTOMACAL', 'SUERO ORAL');
 
 
 INSERT INTO Historial_Medico (   ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta) 

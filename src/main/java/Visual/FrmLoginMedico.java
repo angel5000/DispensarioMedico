@@ -190,7 +190,7 @@ public class FrmLoginMedico extends javax.swing.JFrame {
   public void Sesion(String Usuario, String Contraseña){
     AdmSesion s = new AdmSesion();
     dc= new Doctor();
-    int id=s.IniciarSesionMed(Usuario, Contraseña);
+    int id=s.IniciarSesionMed(Usuario, Contraseña, dc);
     if(id>0){
         dc.setIdDoctor(id);
         FrmDoctor fp = new FrmDoctor(dc);

@@ -64,7 +64,7 @@ public class AdmCitasMedicas {
             while (rs.next()) {//RECORRIDO DE DATOS
                cm = new CitasMedicas();
                cm.setIdPaciente(rs.getInt("IDPaciente"));
-               cm.setIdMedico(rs.getInt("IDMedico"));
+               cm.setIdMedico(rs.getInt("ID_medico"));
                cm.setIdHorario(rs.getInt("IDHorarioCitas"));
                  cm.setNombres(rs.getString("Nombres"));
                 cm.setApellidos(rs.getString("Apellidos"));
@@ -84,6 +84,7 @@ public class AdmCitasMedicas {
          
               }catch(SQLException e){
                 e.getStackTrace();
+                System.out.println(e.getMessage());
             } catch (Exception ex) { 
             Logger.getLogger(AdmCitasMedicas.class.getName()).log(Level.SEVERE, null, ex);
         } 

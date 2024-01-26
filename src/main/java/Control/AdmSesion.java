@@ -5,6 +5,7 @@
 package Control;
 
 import Model.ConexionBD;
+import Model.Doctor;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,9 +47,9 @@ public class AdmSesion {
         return userID;
     }
     
-      public int IniciarSesionMed(String Usuario, String Contraseña){
+      public int IniciarSesionMed(String Usuario, String Contraseña, Doctor med){
         
-         String query = "{CALL VerificarUsuarioMed(?,?,?)}";
+         String query = "{CALL VerificarUsuarioMed(?,?,?,?)}";
           
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
             CallableStatement stmt = conn.prepareCall(query);
@@ -56,11 +57,13 @@ public class AdmSesion {
             stmt.setString(1,  Usuario); // Reemplaza con el nombre de usuario
                 stmt.setString(2, Contraseña);
            stmt.registerOutParameter(3, Types.INTEGER);
+            stmt.registerOutParameter(4, Types.VARCHAR);
 
                 stmt.execute();
 
                
                 userID = stmt.getInt(3);
+                med.setNombresdoc(stmt.getString(4));
           ResultSet rs = stmt.executeQuery();
             if (userID > 0) {
                     System.out.println("Usuario autenticado. ID del Usuario: " + userID);
@@ -70,6 +73,7 @@ public class AdmSesion {
         
         }catch(SQLException e){
                 e.getStackTrace();
+                System.out.println(e.getMessage());
             }
         return userID;
     }

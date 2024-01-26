@@ -114,9 +114,7 @@ BEGIN
 
 END;
 
--- Definir valores de ejemplo para Usuario y Contraseña
-DECLARE @UsuarioEjempl VARCHAR(50) = 
-DECLARE @ContrasenaEjempl VARCHAR(50) = ;
+
 
 -- Ejecutar el procedimiento almacenado
 
@@ -254,6 +252,10 @@ BEGIN
 
 END;
 
+select
+
+
+
 
 
 create PROCEDURE IngresarPago
@@ -306,6 +308,63 @@ END;
 
 select*from HorariosCitas
 
+create PROCEDURE DettlCitasMedicas
+   @Idcita INT
+AS
+BEGIN 
+SELECT 
+ct.IDPaciente,
+ct.IDCita,
+ct.IDHorarioCitas,
+md.ID_medico,
+pc.Nombres,
+pc.Apellidos,
+pc.Cedula,
+pc.Direccion,
+md.Apellidos as Apedoc,
+md.Nombres as Nombdoc,
+md.Especialidad,
+hr.FechaHora as FechaCita,
+mt.Servicio as MotivoCita
+
+from Citas_Medicas ct
+join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
+join HorariosCitas hr on ct.IDHorarioCitas=hr.ID_HORARIO
+join MotivosCitasMedicas mt on ct.Motivo=mt.IDMotivo
+join Medico md on ct.IDMedico=md.ID_medico
+where ct.IDCita=@Idcita;
+
+END;
+select*from Citas_Medicas
+
+
+create PROCEDURE IngresarHistorial_Medico
+    @iD_Paciente INT,
+    @iD_Medico INT,
+    @fechaVisita int,
+    @sintomas VARCHAR(255),
+    @diagnostico VARCHAR(255),
+    @tratamiento VARCHAR(255),
+    @receta VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar el pago realizado
+    INSERT INTO Historial_Medico ( ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta)
+    VALUES ( @iD_Paciente , @iD_Medico, @fechaVisita ,@sintomas,@diagnostico,@tratamiento,@receta);
+
+    
+END;
+
+
+
+
+
+
+
+
+
 
 create PROCEDURE ConfirmaEstadoHorario
    
@@ -318,7 +377,7 @@ BEGIN
     UPDATE HorariosCitas SET Disponibeid=@Disponibeid WHERE ID_HORARIO=@IDHORARI
   
 END;
-
+select *from EstadoHoraCitas
 
 
 

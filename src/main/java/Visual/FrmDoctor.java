@@ -13,6 +13,7 @@ import Model.HistorialMedico;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -29,11 +30,14 @@ public class FrmDoctor extends javax.swing.JFrame {
      */
     AdmCitasMedicas cm = new AdmCitasMedicas();
     int ID=0, IDCITA=0,IDPACIENTE=0, IDHORARIO=0;int Estado=3;
+    int idmed=0;
     String  sintomas, diagnostico, tratamiento, receta;
     Doctor dc;
     public FrmDoctor(Doctor med) {
         initComponents();
         dc=med;
+        idmed=dc.getIdDoctor();
+        lbdocnom.setText(dc.getNombresdoc());
        Listar();
          tbdocct.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -49,6 +53,7 @@ public class FrmDoctor extends javax.swing.JFrame {
                         // Obtener los valores de las celdas en la fila seleccionada
                         // txardetal.setText("");
                         Object idcita=tbdocct.getValueAt(selectedRow, 0);
+                         Object estado=tbdocct.getValueAt(selectedRow, 4);
                          int id = ((Number) idcita).intValue();
                         selectindex( id);
                      
@@ -94,7 +99,8 @@ public void Listar() {
        TB.setRowCount(0);
    
    SimpleDateFormat formatter =new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-       
+       System.out.println(idmed+"");
+              
     for(CitasMedicas dt :  cm.MostrarCitasMedicas(135)){
         
           String fecha= formatter.format(dt.getFechaHora());
@@ -128,7 +134,7 @@ public void Listar() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lbdocnom = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -160,13 +166,14 @@ public void Listar() {
         lbidpac = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtareadet = new javax.swing.JTextArea();
+        btsesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(255, 102, 102));
 
-        jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 0, 14)); // NOI18N
-        jLabel2.setText("Nombdoc");
+        lbdocnom.setFont(new java.awt.Font("Perpetua Titling MT", 0, 14)); // NOI18N
+        lbdocnom.setText("Nombdoc");
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 0, 14)); // NOI18N
         jLabel1.setText("Bienvenido Dr.");
@@ -386,32 +393,39 @@ public void Listar() {
 
         jScrollPane2.setViewportView(jPanel7);
 
+        btsesion.setText("Cerrar Sesion");
+        btsesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btsesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
-                                .addComponent(jLabel5))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel4))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2)))
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel3)
-                        .addGap(0, 693, Short.MAX_VALUE))
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel5))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(lbdocnom)))
+                .addGap(36, 36, 36)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 566, Short.MAX_VALUE)
+                .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -425,10 +439,12 @@ public void Listar() {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)))
+                            .addComponent(lbdocnom)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel3)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -461,7 +477,7 @@ public void Listar() {
              txttrata.getText(), txtreceta.getText());
      hr.SetHorariOcupado(IDHORARIO, Estado);
         System.out.println(IDHORARIO+"");
-        
+        JOptionPane.showMessageDialog(null,"HISTORIAL INGRESADO - CITA REGISTRADA" );
         
     }//GEN-LAST:event_btingrehistoActionPerformed
 
@@ -476,6 +492,13 @@ public void Listar() {
     private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
         Estado=2;
     }//GEN-LAST:event_jRadioButton8ActionPerformed
+
+    private void btsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btsesionActionPerformed
+        this.setVisible(false);
+        JOptionPane.showMessageDialog(null, "SESION CERRADA");
+        Login l = new Login();
+        l.setVisible(true);
+    }//GEN-LAST:event_btsesionActionPerformed
 
     
     
@@ -520,10 +543,10 @@ public void Listar() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btingrehisto;
     private javax.swing.JButton btingrehisto5;
+    private javax.swing.JButton btsesion;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -545,6 +568,7 @@ public void Listar() {
     private javax.swing.JScrollPane jScrollPane19;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane20;
+    private javax.swing.JLabel lbdocnom;
     private javax.swing.JLabel lbidpac;
     private javax.swing.JTable tbdocct;
     private javax.swing.JTextArea txtareadet;
