@@ -43,5 +43,8 @@ public interface HorariosInterface {
 
     public void setFechaHora(Date FechaHora);
     
-  
+  public String getFechafin();
+      
+    public void setFechafin(String Fechafin);
+    
 }

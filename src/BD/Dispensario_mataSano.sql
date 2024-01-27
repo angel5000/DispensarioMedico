@@ -1,34 +1,7 @@
 
 use SQLADV
 
-/*
----CREACION DE USUARIOS---
-CREATE USER doctor1 IDENTIFIED BY 123456 default tablespace users;
-CREATE USER paciente1 IDENTIFIED BY 123456 default tablespace users;*/
 
---CREACION DE ROLES----
-create role medicos;
-create role pacientes;
-
----CREACION DE SINONIMOS PARA LAS TABLAS
-create public synonym ingresos for ingresos;
-create public synonym medico for medico;
-create public synonym paciente for paciente;
-
-----DAR PERMISOS A USUARIOS TANTO DE ROLES COMO DE TABLAS Y SESION
-GRANT CREATE SESSION TO paciente1;
-GRANT CREATE SESSION TO doctor1;
-grant medicos to doctor1;
-grant pacientes to paciente1;
-grant select,insert on citas_medicas to paciente1;
-grant select,insert on paciente to paciente1;
-grant select on medico to doctor1;
-grant select on citas_medicas to doctor1;
-
-----------------------------------------------
-
-
--------TABLAS------------
 
 
 ---------USUARIOS---------
@@ -89,10 +62,6 @@ SET @Contraseña = 'Angel123456';
     FROM UsuariosPaciente
     WHERE   HashedContrasena = HASHBYTES('SHA2_512', @Contraseña + CONVERT(nvarchar(32), Salt));
 
-select *from UsuariosPaciente
-delete from UsuariosPaciente
-
-select *from HorariosCitas
 
 
 
@@ -109,21 +78,25 @@ VALUES (
     HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
 );
 
+
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
 DECLARE @Contraseña NVARCHAR(MAX);
-SET @Contraseña = 'Angel123456';
+SET @Contraseña = '123456';
 
-SELECT ID_DatosUsuario
-FROM UsuariosPaciente
-WHERE HashedContrasena = HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contraseña);
-
-
-
-
-
-select*from Medico
-select *from Rol
+INSERT INTO UsuariosPaciente (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUES (
+    41,
+    'ma123456',100,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
+);
 select*from Citas_Medicas
-select*from UsuariosMedicos
+UPDATE HorariosCitas SET Disponibeid =1 WHERE ID_HORARIO=18
+select*from HorariosCitas
+select*from Historial_Medico
+delete from Historial_Medico where id
+
 
 
 
@@ -175,15 +148,9 @@ Genero varchar(100)NOT NULL,
 CorreoElectronico varchar(100)NOT NULL,
 Telefonoid int NOT NULL
 );
-/*alter table pacientes
-add canton varchar(50);
 
-select*from pacientes
-alter table pacientes add Genero varchar(100)
-alter table pacientes add CorreoElectronico varchar(100)
-update pacientes set Direccion='Los vergeles, Coop. los vergeles Mz M s3' where ID_PACIENTE=38*/
 
-----INGRESO DE DATOS PACIENTE
+
 DELETE FROM pacientes
 update pacientes set Telefonoid=1 where ID_PACIENTE =37
 update pacientes set Telefonoid=2 where ID_PACIENTE =38
@@ -196,24 +163,9 @@ update pacientes set Telefonoid=7 where ID_PACIENTE =43
 update pacientes set Telefonoid=8 where ID_PACIENTE =44
 update pacientes set Telefonoid=9 where ID_PACIENTE =45
 update pacientes set Telefonoid=10 where ID_PACIENTE =46
-select*from Especialidad
-ALTER TABLE Medico
-add Especialidadid INT;
-
-select *from Medico
--- Actualizar la nueva columna con los datos de la columna original
-UPDATE Medico
-SET Especialidadid = CAST(Especialidad AS INT);
-
--- Eliminar la columna original
-update Medico SET Especialidadid=402 where ID_medico=126 
-
-ALTER TABLE pacientes
-DROP COLUMN Telefono;
 
 
-alter table pacientes 
-select*from pacientes
+
 insert into  pacientes(Cedula,Nombres,Apellidos ,Fecha_nacimiento,Provincia,Direccion,NumCelular,canton, Genero, CorreoElectronico,Telefonoid )
 values('0946584566', 'Angel David ', 'Vergara Paredes', '31/01/2000', 'Guayas', 'Prosperina, Mercado de la Prosperina', '0984659455', 'Guayaquil', 'M', 'angel.vergara@gmail.com',1),
     ('0985694588', 'David Alberto ', 'Paredes Perez', '24/04/1999', 'Guayas', 'Los vergeles, Coop. los vergeles Mz M s3',  '0954685666', 'Guayaquil', 'M', 'david.paredes@gmail.com',2),
@@ -266,12 +218,8 @@ Genero char(1)NOT NULL,
 CorreoElectronico varchar(100)NOT NULL,
 constraint Ubicafk FOREIGN KEY (UbicacionDisp) REFERENCES Ubicacion(IDUbicacion)
 );
-/*
-alter table Medico add CorreoElectronico varchar(100)
-select*from Medico
-delete from Medico
-select*from Ubicacion*/
-/*delete from Medico*/
+
+
 select*from medico
 
 ------INGRESO USUARIO MEDICO----
@@ -350,11 +298,8 @@ VALUES
 select*from Citas_Medicas
 delete from Citas_Medicas where IDCita=8
 
-/*delete from Citas_Medicas
-select*from MotivosCitasMedicas
 
-alter table Citas_Medicas add  Motivo int
-update Citas_Medicas set Motivo=2 where IDCita=2*/
+
 SELECT
    pacientes.Apellidos,
    Medico.Apellidos,
@@ -395,13 +340,7 @@ especialiMed int,
 constraint espicalfk FOREIGN KEY (especialiMed) REFERENCES Especialidad(IDEspecialidad)
 );
 
-select *from MotivosCitasMedicas
-/*
-alter table MotivosCitasMedicas drop column IDMedico
-delete from MotivosCitasMedicas
-select*from Especialidad
-select*from Medico where Especialidad='Medicina General'
-select*from MotivosCitasMedicas*/
+
 INSERT INTO MotivosCitasMedicas (especialiMed ,Servicio) 
 VALUES 
 ( 401, ' Consulta General'),
@@ -428,9 +367,8 @@ Descuentos Float,
 constraint Motivosfk FOREIGN KEY (IDMCM) REFERENCES MotivosCitasMedicas(IDMotivo)
 
 );
-/*delete from CostoServicios
-select*from CostoServicios
-select*from MotivosCitasMedicas*/
+
+
 INSERT INTO CostoServicios (IDMCM  ,Costos,Descuentos) 
 VALUES 
 ( 71,5.00,0 ),
@@ -455,14 +393,9 @@ VALUES
 
 ( 'SUR','URDANETA, Garay Medardo Angel Silva 723 y Victor'),
 ( 'SUR','Guasmo sur, Coop. Reina del Quinche 2');
-/*
-alter table citas_medicas
-alter table citas_medicas drop column CodigoCita
-SELECT*FROM pacientes
-SELECT*FROM Medico
-select*from MotivosCitasMedicas
-SELECT*FROM Citas_Medicas
-select*from HorariosCitas*/
+
+
+
 select*from MotivosCitasMedicas
 select *from Areas
 INSERT INTO citas_medicas (IDPaciente,IDMedico,IDHorarioCitas,Motivo) 
@@ -501,6 +434,7 @@ ID_Doctor int,
 Areas int,
 FechaHora datetime,
 Disponibeid int,
+ FechaFin datetime,
  constraint MEDICoFK FOREIGN KEY (ID_Doctor) REFERENCES Medico(ID_Medico),
 constraint Areahfk FOREIGN KEY (Areas) REFERENCES Areas(ID_Areas)
 alter table HorariosCitas add constraint Disponifk FOREIGN KEY (Disponibeid) REFERENCES EstadoHoraCitas(ID_Estadhocita)
@@ -536,16 +470,22 @@ update HorariosCitas set Disponibeid=1 where Disponibilidad='S';
 
 		select * FROM Medico
 		select*from MotivosCitasMedicas
-/*
-delete from HorariosCitas
-SELECT*FROM HorariosCitas
-select*from Medico*/
-/*
-insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibilidad) 
-values(19,1,'12/11/23 16:30','S'),(20,2,'15/11/23 11:30','S'),(21,4,'19/11/23 13:00','S')
-,(22,5,'22/11/23 11:00','S'),(23,3,'18/11/23 10:30','S');*/
+
+
+
+insert into HorariosCitas (ID_Doctor,Areas ,FechaHora,Disponibeid) 
+values(135,33,'26/1/24 09:30',1),(127,29,'26/1/24 11:30',1),(127,29,'26/1/24 10:30',1)
+,(135,33,'26/1/24 12:00',1),(135,33,'26/1/24 12:00',1);
+
+select*from Medico
+select*from Areas
 select*from HorariosCitas
+update HorariosCitas set Fechafin =null where ID_HORARIO=18;
+update HorariosCitas set FechaHora=' 24/11/23 14:30:00.000' where ID_HORARIO=28;
+delete from HorariosCitas where ID_HORARIO=23
+alter table horarioscitas add  FechaFin datetime
 select*from EstadoHoraCitas
+
 select*from Citas_Medicas
 select*from Historial_Medico
 delete from Historial_Medico where ID_Historial=1216
@@ -660,46 +600,6 @@ VALUES
 
 
 
-
-
-
-
-
-
-
-
-
-/*( 'Ana', 'García', '1990-08-15', 'Femenino', 'Urdesa Central', '234567890', 'ana.garcia@email.com'),
-( 'Carlos', 'Gómez', '1985-12-03', 'Masculino', 'La Alborada', '345678901', 'carlos.gomez@email.com'),
-( 'María', 'López', '1982-06-25', 'Femenino', 'Los Ceibos', '456789012', 'maria.lopez@email.com'),
-( 'Luis', 'Rodríguez', '1978-11-07', 'Masculino', 'Samborondón', '567890123', 'luis.rodriguez@email.com'),
-( 'Laura', 'Martínez', '1992-02-19', 'Femenino', 'Alborada', '678901234', 'laura.martinez@email.com'),
-( 'Andrés', 'Hernández', '1975-04-30', 'Masculino', 'La Garzota', '789012345', 'andres.hernandez@email.com'),
-( 'Sofía', 'Díaz', '1988-07-14', 'Femenino', 'Vía a la Costa', '890123456', 'sofia.diaz@email.com'),
-( 'Jorge', 'Suárez', '1983-09-22', 'Masculino', 'Los Esteros', '901234567', 'jorge.suarez@email.com'),
-( 'Gabriela', 'Pazmiño', '1995-01-28', 'Femenino', 'Ceibos Norte', '012345678', 'gabriela.pazmino@email.com'),
-( 'Mario', 'Moreno', '1981-03-17', 'Masculino', 'Urdesa', '123456780', 'mario.moreno@email.com'),
-( 'Isabel', 'Guzmán', '1993-06-02', 'Femenino', 'La Joya', '234567890', 'isabel.guzman@email.com'),
-( 'Pablo', 'Chávez', '1979-08-12', 'Masculino', 'Guasmo', '345678901', 'pablo.chavez@email.com'),
-( 'Elena', 'Sánchez', '1984-11-05', 'Femenino', 'Alborada', '456789012', 'elena.sanchez@email.com'),
-('Ricardo', 'Ramírez', '1977-02-15', 'Masculino', 'Los Vergeles', '567890123', 'ricardo.ramirez@email.com'),
-( 'Mónica', 'Andrade', '1991-05-23', 'Femenino', 'Norte de Guayaquil', '678901234', 'monica.andrade@email.com'),
-( 'Diego', 'Orozco', '1986-07-31', 'Masculino', 'Mucho Lote', '789012345', 'diego.orozco@email.com'),
-('Valeria', 'Aguilar', '1980-10-09', 'Femenino', 'Los Ríos', '890123456', 'valeria.aguilar@email.com'),
-( 'Fernando', 'Vargas', '1994-01-19', 'Masculino', 'Los Ángeles', '901234567', 'fernando.vargas@email.com'),
-('Alejandra', 'Rojas', '1982-04-25', 'Femenino', 'Las Peñas', '012345678', 'alejandra.rojas@email.com'),
-('José', 'Paredes', '1976-06-11', 'Masculino', 'Sauces', '123456780', 'jose.paredes@email.com'),
-( 'Carmen', 'Bustamante', '1990-09-28', 'Femenino', 'Guasmo Central', '234567890', 'carmen.bustamante@email.com'),
-('Roberto', 'Estrada', '1985-12-17', 'Masculino', 'Ceibos Sur', '345678901', 'roberto.estrada@email.com'),
-('Alicia', 'Rivadeneira', '1979-02-14', 'Femenino', 'Alborada', '456789012', 'alicia.rivadeneira@email.com'),
-('Gustavo', 'Cordova', '1993-05-22', 'Masculino', 'Guasmo Sur', '567890123', 'gustavo.cordova@email.com'),
-('Lucía', 'Moreira', '1978-08-29', 'Femenino', 'La Puntilla', '678901234', 'lucia.moreira@email.com'),
-('Fabián', 'Sosa', '1991-11-08', 'Masculino', 'Samborondón', '789012345', 'fabian.sosa@email.com'),
-('Marcela', 'Calderón', '1986-02-05', 'Femenino', 'Urdesa', '890123456', 'marcela.calderon@email.com'),
-( 'Héctor', 'Vera', '1981-04-20', 'Masculino', 'La Garzota', '901234567', 'hector.vera@email.com'),
-('Camila', 'Molina', '1995-07-18', 'Femenino', 'Urdesa Central', '012345678', 'camila.molina@email.com');*/
-select*from factura
-
 create table Factura(
  ID_Factura INT PRIMARY KEY identity (1200,1),
  ID_Paciente INT NOT NULL,
@@ -716,13 +616,9 @@ Motivo int NOT NULL,
  constraint Motivofk FOREIGN KEY (motivo) REFERENCES MotivosCitasMedicas(IDMotivo),
  
 );
-alter tablE Factura  add 
-/*delete from Factura
-alter table factura add Iva float
-select *from Factura
-select*from HorariosCitas
-select*from Citas_Medicas
-select*from CostoServicios*/
+
+
+
 insert into Factura (ID_Paciente,ID_Medico,FechaVisita,Motivo,Costo,Iva ,Subtotal,Total)
 values(37,135,15,71,8,0,5.00,5.00);
 
@@ -770,17 +666,20 @@ FROM
   CostoServicios ON CostoServicios.IDMCM = Factura.Motivo 
   WHERE pacientes.ID_PACIENTE=37;
 
-  select*from MetodoPago
+
 	create table MetodoPago(
 	ID_MetPago INT PRIMARY KEY identity (0300,1),
 	Metodo varchar(60)
 	);
+
 	insert into MetodoPago (Metodo) 
 	values('Tarjeta de Debito'),
 	('PayPal'),
 	('Transferencia Bancaria'),
    ('Tarjeta de Credito');
-   select*from MetodoPago
+
+
+
 	create table PagosRealizados(
 	ID_MetPago INT PRIMARY KEY identity (4000,1),
 	IdPaciente int,
@@ -791,5 +690,3 @@ FROM
 	);
 	insert into PagosRealizados (IdPaciente,idMetodoPago)
 values(37,300);
-DELETE FROM PagosRealizados WHERE ID_MetPago=4000
-select*from PagosRealizados

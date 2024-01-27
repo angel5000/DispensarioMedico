@@ -48,6 +48,7 @@ public class FrmLoginMedico extends javax.swing.JFrame {
         txtusu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(350, 110));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 

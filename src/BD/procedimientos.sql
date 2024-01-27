@@ -9,6 +9,8 @@ BEGIN
     WHERE ID_PACIENTE = @id;
 END;
 
+
+
 create PROCEDURE TelefonoPaciente
     @Numtele varchar(10)
 AS
@@ -18,6 +20,27 @@ BEGIN
 	join pacientes on TelefonosPacientes.ID_Paciente=pacientes.ID_PACIENTE
     WHERE pacientes.ID_PACIENTE = @Numtele;
 END;
+
+
+
+
+create PROCEDURE ObtenerHorariosCitas
+AS
+BEGIN
+    SELECT 
+        ID_HORARIO,
+        ID_Doctor,
+        Areas,
+        FechaHora,
+		Disponibeid,
+        CASE WHEN FechaFin IS NULL THEN 'NO ASIGNADO' ELSE CAST( FechaFin AS VARCHAR(255)) END AS FechaFin 
+       
+    FROM 
+        HorariosCitas;
+END;
+
+
+
 
 
 
@@ -46,18 +69,6 @@ BEGIN
     WHERE
         ID_PACIENTE = @IDPaciente;
 END;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -118,13 +129,11 @@ BEGIN
 
    set @IDUsuario=null;
 
-    -- Verificar si el usuario y contraseña existen
     SELECT @IDUsuario=ID_DatosUsuario
     FROM UsuariosPaciente
     WHERE  Usuario =@Usuario and HashedContrasena =  HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contrasena);
 
 
-    -- Devolver el ID del usuario si existe
     IF @Contrasena IS NOT NULL
         SELECT @IDUsuario AS 'ID del Usuario';
     ELSE
@@ -143,14 +152,14 @@ BEGIN
 
    set @IDUsuario=null;
     set @nombdoc=null;
-    -- Verificar si el usuario y contraseña existen
+
     SELECT @IDUsuario=um.ID_DatosUsuario,@nombdoc=md.Apellidos
     FROM  UsuariosMedico um 
 	join Medico md on um.ID_DatosUsuario=md.ID_medico
     WHERE  Usuario =@Usuario and HashedContrasena =  HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contrasena);
 
 
-    -- Devolver el ID del usuario si existe
+  
     IF @Contrasena IS NOT NULL
         SELECT @IDUsuario AS 'ID del Usuario', @nombdoc AS 'doctor';
 	
@@ -188,15 +197,14 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Insertar la factura
+  
     INSERT INTO Factura (ID_Paciente, ID_Medico, FechaVisita, Motivo, Subtotal ,Total,Iva ,Costo)
     VALUES (@ID_Paciente, @ID_Medico, @FechaVisita, @Motivo,  @Subtotal, @Total,@Iva, @Costo);
 
   
 END;
-DECLARE @ID_Esp INT;
-SET @ID_Esp = 400; 
-EXEC ConsultarMotivos @ID_Espe = @ID_Esp;
+
+
 create PROCEDURE ConsultarMotivos
  @ID_Espe INT
 AS
@@ -208,13 +216,8 @@ BEGIN
 	inner join CostoServicios on MotivosCitasMedicas.IDMotivo=CostoServicios.IDMCM
 	where especialiMed=@ID_Espe;
 END;
-DECLARE @ID_Esp INT;
-SET @ID_Esp = 400;  
-EXEC  ConsultarMotivos @ID_Espe = @ID_Esp;
 
-select*from MotivosCitasMedicas
 
-SELECT *FROM CostoServicios
 
 
 
@@ -253,6 +256,8 @@ BEGIN
 		  INNER JOIN 
     WHERE pacientes.ID_PACIENTE = @idPaciente;
 END;
+
+
 
 create PROCEDURE ConsultaCitasMedicas
 @Disponibili int,
@@ -300,7 +305,6 @@ BEGIN
 
 END;
 
-select
 
 
 
@@ -314,22 +318,15 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Insertar el pago realizado
+
     INSERT INTO PagosRealizados (IdPaciente, idMetodoPago)
     VALUES (@IdPaciente,  @IdMetodoPago);
 
     
 END;
-select *from PagosRealizados
-DECLARE @PacienteID INT;
-DECLARE @MetodoPagoID INT;
 
 
-SET @PacienteID = 37; 
-SET @MetodoPagoID = 303;  
 
-
-EXEC IngresarPago @IdPaciente = @PacienteID, @IdMetodoPago = @MetodoPagoID;
 
 create PROCEDURE CitasMedicasIngresadas
    @IdMedico INT
@@ -345,8 +342,8 @@ pc.Nombres,
 pc.Apellidos,
 hr.FechaHora,
 mt.Servicio as MotivoCita,
-sh.Disponibilidad
-
+sh.Disponibilidad,
+  CASE WHEN hr.FechaFin IS NULL THEN 'NO ASIGNADO' ELSE CAST( hr.FechaFin AS VARCHAR(255)) END AS FechaFin 
 from Citas_Medicas ct
 join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
 join Medico md on ct.IDMedico=md.ID_medico
@@ -361,6 +358,45 @@ END;
 update Citas_Medicas set IDHorarioCitas =15 where IDPaciente=37
 select*from Citas_Medicas
 select*from HorariosCitas where ID_Doctor =135
+
+create PROCEDURE RegCitasMedicas
+   @Idmedi INT,
+    @Iddispo INT
+AS
+BEGIN 
+SELECT 
+ct.IDPaciente,
+ct.IDCita,
+ct.IDHorarioCitas,
+sh.Disponibilidad,
+md.ID_medico,
+pc.Nombres,
+pc.Apellidos,
+pc.Cedula,
+pc.Direccion,
+md.Apellidos as Apedoc,
+md.Nombres as Nombdoc,
+md.Especialidad,
+hr.FechaHora as FechaCita,
+mt.Servicio as MotivoCita,
+cs.Costos,
+ CASE WHEN hr.FechaFin IS NULL THEN 'NO ASIGNADO' ELSE CAST( hr.FechaFin AS VARCHAR(255)) END AS FechaFin 
+
+from Citas_Medicas ct
+join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
+join HorariosCitas hr on ct.IDHorarioCitas=hr.ID_HORARIO
+join MotivosCitasMedicas mt on ct.Motivo=mt.IDMotivo
+join Medico md on ct.IDMedico=md.ID_medico
+join EstadoHoraCitas sh on  hr.Disponibeid=sh.ID_Estadhocita
+join CostoServicios cs on ct.Motivo =cs.IDMCM
+where ct.IDMedico=@Idmedi and hr.Disponibeid=@Iddispo ;
+
+END;
+
+select*from Citas_Medicas
+select*from HorariosCitas
+
+
 
 create PROCEDURE DettlCitasMedicas
    @Idcita INT
@@ -378,19 +414,87 @@ pc.Direccion,
 md.Apellidos as Apedoc,
 md.Nombres as Nombdoc,
 md.Especialidad,
-hr.FechaHora as FechaCita,
-mt.Servicio as MotivoCita
+hr.FechaHora as FechaCita
 
 from Citas_Medicas ct
 join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
 join HorariosCitas hr on ct.IDHorarioCitas=hr.ID_HORARIO
 join MotivosCitasMedicas mt on ct.Motivo=mt.IDMotivo
 join Medico md on ct.IDMedico=md.ID_medico
-where ct.IDCita=@Idcita;
+
+where ct.IDCita= @Idcita;
 
 END;
 
-select*from Citas_Medicas
+create PROCEDURE CitasMedicasPaciente
+   @IdPACIENTE INT,
+   @IdDoctor INT
+AS
+BEGIN 
+
+SELECT 
+ct.IDPaciente,
+ct.IDCita,
+ct.IDHorarioCitas,
+sh.Disponibilidad,
+md.ID_medico,
+pc.Nombres,
+pc.Apellidos,
+pc.Cedula,
+pc.Direccion,
+md.Apellidos as Apedoc,
+md.Nombres as Nombdoc,
+md.Especialidad,
+hr.FechaHora as FechaCita,
+mt.Servicio as MotivoCita,
+cs.Costos,
+ CASE WHEN hr.FechaFin IS NULL THEN 'NO ASIGNADO' ELSE CAST( hr.FechaFin AS VARCHAR(255)) END AS FechaFin 
+
+from Citas_Medicas ct
+join pacientes pc on ct.IDPaciente=pc.ID_PACIENTE
+join HorariosCitas hr on ct.IDHorarioCitas=hr.ID_HORARIO
+join MotivosCitasMedicas mt on ct.Motivo=mt.IDMotivo
+join Medico md on ct.IDMedico=md.ID_medico
+join EstadoHoraCitas sh on  hr.Disponibeid=sh.ID_Estadhocita
+join CostoServicios cs on ct.Motivo =cs.IDMCM
+where ct.IDMedico=  @IdDoctor
+    and ct.IDPaciente=@IdPACIENTE ;
+	
+END;
+
+
+
+create PROCEDURE MostrarHistorialreg
+     @IDPaciente INT,
+	   @IdDoctor INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+       pacientes.Apellidos+''+pacientes.Nombres AS NombreCompleto,
+    Medico.Apellidos+' '+Medico.Nombres AS Medico,
+        Historial_Medico.Sintomas,
+        Historial_Medico.Diagnostico,
+        Historial_Medico.Tratamiento,
+        Historial_Medico.Receta,
+        HorariosCitas.FechaHora AS FechaCitaMedica
+    FROM
+        Historial_Medico
+    INNER JOIN
+        Pacientes ON Historial_Medico.ID_Paciente = Pacientes.ID_Paciente
+    INNER JOIN
+        Medico ON Historial_Medico.ID_Medico = Medico.ID_Medico
+    INNER JOIN
+        HorariosCitas ON HorariosCitas.ID_HORARIO = Historial_Medico.FechaVisita
+    WHERE
+        Historial_Medico.ID_Paciente = @IDPaciente and Historial_Medico.ID_Medico= @IdDoctor;
+END;
+
+
+
+
+
 
 
 create PROCEDURE IngresarHistorial_Medico
@@ -405,20 +509,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Insertar el pago realizado
+  
     INSERT INTO Historial_Medico ( ID_Paciente,ID_Medico,FechaVisita,Sintomas, Diagnostico,Tratamiento,Receta)
     VALUES ( @iD_Paciente , @iD_Medico, @fechaVisita ,@sintomas,@diagnostico,@tratamiento,@receta);
 
     
 END;
-
-
-
-
-
-
-
-
 
 
 create PROCEDURE ConfirmaEstadoHorario
@@ -429,7 +525,7 @@ AS
 BEGIN
    
 
-    UPDATE HorariosCitas SET Disponibeid=@Disponibeid WHERE ID_HORARIO=@IDHORARI
+    UPDATE HorariosCitas SET Disponibeid=@Disponibeid, FechaFin=GETDATE() WHERE ID_HORARIO=@IDHORARI
   
 END;
 select *from EstadoHoraCitas

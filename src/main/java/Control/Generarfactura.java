@@ -28,7 +28,7 @@ public class Generarfactura {
     
     
     public void factura(Factura dt){
-    String DEST = "C:/Users/angeldvvp/Desktop/hola.pdf";
+    String DEST = "C:/Users/angeldvvp/Desktop/CitaMedica.pdf";
           try{
      PdfDocument pdf = new PdfDocument(new PdfWriter(DEST));
     Document document = new Document(pdf);

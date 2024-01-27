@@ -72,7 +72,7 @@ public class AdmCitasMedicas {
                 cm.setFechaHora(rs.getTimestamp("FechaHora"));
                 cm.setDisponible(rs.getString("Disponibilidad"));
                 cm.setMotivos(rs.getString("MotivoCita"));
-                
+                cm.setFechafin(rs.getString("FechaFin"));
             
                 ctm.add(cm);
                 
@@ -134,5 +134,100 @@ public class AdmCitasMedicas {
         } 
         return ctm;
     }
-    
+     
+      public List <CitasMedicas> MostrarDetCitasreg(int idpaci, int iddoc){
+        String query = "{CALL CitasMedicasPaciente(?,?)}";
+           List<CitasMedicas> ctm= new ArrayList<>();
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+            
+           stmt.setInt(1,iddoc);
+           stmt.setInt(2,  idpaci);
+                stmt.execute();
+             ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {//RECORRIDO DE DATOS
+               cm = new CitasMedicas();
+            cm.setIdPaciente(rs.getInt("IDPaciente"));
+                 cm.setNombres(rs.getString("Nombres"));
+                 cm.setCedula(rs.getString("Cedula"));
+                 cm.setDireccion(rs.getString("Direccion"));
+                cm.setApellidos(rs.getString("Apellidos"));
+                cm.setCodigCita(rs.getInt("IDCita"));
+                cm.setNombresdoc(rs.getString("Nombdoc"));
+                cm.setIdHorario(rs.getInt("IDHorarioCitas"));
+                cm.setIdMedico(rs.getInt("ID_medico"));
+                cm.setEspecialidad(rs.getString("Especialidad"));
+                cm.setFechaHora(rs.getTimestamp("FechaCita"));
+                cm.setMotivos(rs.getString("MotivoCita"));
+                
+                System.out.println(cm.getApellidos()+" asd");
+                ctm.add(cm);
+                
+            }
+
+        
+         
+
+         
+              }catch(SQLException e){
+                e.getStackTrace();
+                System.out.println(e.getMessage());
+            } catch (Exception ex) { 
+            Logger.getLogger(AdmCitasMedicas.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return ctm;
+    }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+             public List <CitasMedicas> regtabcitas(int idmedico, int estado){
+        String query = "{CALL RegCitasMedicas(?,?)}";
+           List<CitasMedicas> ctm= new ArrayList<>();
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+            
+           stmt.setInt(1, idmedico);
+            stmt.setInt(2, estado);
+                stmt.execute();
+             ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {//RECORRIDO DE DATOS
+               cm = new CitasMedicas();
+               cm.setIdPaciente(rs.getInt("IDPaciente"));
+               cm.setIdMedico(rs.getInt("ID_medico"));
+               cm.setIdHorario(rs.getInt("IDHorarioCitas"));
+                 cm.setNombres(rs.getString("Nombres"));
+                cm.setApellidos(rs.getString("Apellidos"));
+                cm.setCedula(rs.getString("Cedula"));
+                 cm.setDireccion(rs.getString("Direccion"));
+                cm.setCodigCita(rs.getInt("IDCita"));
+                cm.setFechaHora(rs.getTimestamp("FechaCita"));
+                cm.setDisponible(rs.getString("Disponibilidad"));
+                cm.setMotivos(rs.getString("MotivoCita"));
+                 cm.setCosto(rs.getFloat("Costos"));
+                cm.setFechafin(rs.getString("FechaFin"));
+            
+                ctm.add(cm);
+                
+            }
+
+        
+         
+
+         
+              }catch(SQLException e){
+                e.getStackTrace();
+                System.out.println(e.getMessage());
+            } catch (Exception ex) { 
+            Logger.getLogger(AdmCitasMedicas.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return ctm;
+    }
 }

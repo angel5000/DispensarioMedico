@@ -41,6 +41,7 @@ public class AdmHistMedico {
                 hm.setTratamiento(rs.getString("Tratamiento"));
                 hm.setReceta(rs.getString("Receta"));
                 hm.setFechaVisita(rs.getTimestamp("FechaCitaMedica"));
+
                 historial.add(hm);
                 
             }
@@ -55,7 +56,41 @@ public class AdmHistMedico {
         return historial;
    
    }
+   public List<HistorialMedico> getHistorialreg(int idpaciente, int iddoct) throws SQLException {
+        List<HistorialMedico> historial = new ArrayList<>();
+       String query = "{CALL  MostrarHistorialreg(?,?)}";
+          
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+            CallableStatement stmt = conn.prepareCall(query);
+             ) {
+            
+             stmt.setInt(1, idpaciente);
+             stmt.setInt(2, iddoct);
+                stmt.execute();
+             ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {//RECORRIDO DE DATOS
+               HistorialMedico hm = new HistorialMedico();
+               hm.setPaciente(rs.getString("NombreCompleto"));
+                hm.setMedico(rs.getString("Medico"));
+                hm.setDiagnostico(rs.getString("Diagnostico"));
+                hm.setSintomas(rs.getString("Sintomas"));
+                hm.setTratamiento(rs.getString("Tratamiento"));
+                hm.setReceta(rs.getString("Receta"));
+                hm.setFechaVisita(rs.getTimestamp("FechaCitaMedica"));
+                historial.add(hm);
+                
+            }
+                
+                
+                
+                
+        } catch(SQLException e){
+              
+                System.out.println(e.getMessage()+e.getStackTrace());
+            }
+        return historial;
    
+   }
    public void IngresarHistorialMed(int iD_Paciente ,int iD_Medico,int fechaVisita ,
            String sintomas ,String diagnostico,String tratamiento,String receta ){
        

@@ -13,6 +13,8 @@ import Model.HistorialMedico;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -132,7 +134,7 @@ public void Listar() {
           
            
                 TB.addRow(new Object[]{dt.getCodigCita(),dt.getNombres()+" "+dt.getApellidos(),
-                fecha,dt.getMotivos(),dt.getDisponible()});
+                fecha,dt.getMotivos(),dt.getDisponible(), dt.getFechafin()});
                 
                 int tamaño = tamañofila( tbdocct.getFont());
       tbdocct.setRowHeight(tamaño);
@@ -189,8 +191,10 @@ public void Listar() {
         btlimpcamp = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         btsesion = new javax.swing.JButton();
+        btregmed = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(100, 20));
 
         jPanel2.setBackground(new java.awt.Color(255, 102, 102));
 
@@ -218,14 +222,14 @@ public void Listar() {
 
             },
             new String [] {
-                "Codigo Cita", "Nombres Paciente", "Fecha Y Hora Cita", "Motivo Cita", "Estado"
+                "Codigo Cita", "Nombres Paciente", "Fecha Y Hora Cita", "Motivo Cita", "Estado", "FechaFinal"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -395,6 +399,13 @@ public void Listar() {
             }
         });
 
+        btregmed.setText("Registros");
+        btregmed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btregmedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -415,6 +426,8 @@ public void Listar() {
                 .addGap(36, 36, 36)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btregmed, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1012, Short.MAX_VALUE)
@@ -435,7 +448,9 @@ public void Listar() {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btsesion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btregmed, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -463,20 +478,32 @@ public void Listar() {
     private void btingrehistoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingrehistoActionPerformed
      AdmHistMedico hm = new  AdmHistMedico();
      AdmHorariosCitas hr = new AdmHorariosCitas();
+     LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        // Formatear la fecha y hora (opcional, puedes omitir esta parte si no necesitas formato)
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String fechaHoraFormateada = fechaHoraActual.format(formato);
      hm.IngresarHistorialMed( IDPACIENTE,ID, IDHORARIO, txtsint.getText(), txtdiag.getText(), 
              txttrata.getText(), txtreceta.getText());
      hr.SetHorariOcupado(IDHORARIO, Estado);
         System.out.println(IDHORARIO+"");
-        JOptionPane.showMessageDialog(null,"HISTORIAL INGRESADO - CITA REGISTRADA" );
         
+        JOptionPane.showMessageDialog(null,"HISTORIAL INGRESADO - CITA REGISTRADA" );
+        Listar();
     }//GEN-LAST:event_btingrehistoActionPerformed
 
     private void btsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btsesionActionPerformed
         this.setVisible(false);
         JOptionPane.showMessageDialog(null, "SESION CERRADA");
-        Login l = new Login();
+        FrmLoginMedico l = new FrmLoginMedico();
         l.setVisible(true);
     }//GEN-LAST:event_btsesionActionPerformed
+
+    private void btregmedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btregmedActionPerformed
+       FrmReporteDoc dc = new FrmReporteDoc(idmed);
+        System.out.println(idmed+"");
+       dc.setVisible(true);
+    }//GEN-LAST:event_btregmedActionPerformed
 
     
     
@@ -523,6 +550,7 @@ public void Listar() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btingrehisto;
     private javax.swing.JButton btlimpcamp;
+    private javax.swing.JButton btregmed;
     private javax.swing.JButton btsesion;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;

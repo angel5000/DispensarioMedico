@@ -13,7 +13,7 @@ import java.util.Date;
 public class CitasMedicas extends Paciente implements HorariosInterface,MotivosInterfaces,Doctorinterface{
     int CodigCita,id;
     float Costo;
-             String motivos, Medico,  Horario, Especialidad, nombdoc;
+             String motivos, Medico,  Horario, Especialidad, nombdoc; String Fechafin;
              String Doctor; String Area,  Direccion; Date FechaHora; String  Disponible;
     int idHorario=0; int idMedico=0;
     public CitasMedicas(){
@@ -21,7 +21,7 @@ public class CitasMedicas extends Paciente implements HorariosInterface,MotivosI
     }
      public CitasMedicas(int CodigCita,int idPaciente,String Nombres, String Apellidos,String Cedula,
              String Medico, String Horario,int id , String motivos, float Costo,int idHorario,int idMedico,String Doctor,String Especialidad,
-            String Area, Date FechaHora, String Direccion,String Disponible){
+            String Area, Date FechaHora, String Direccion,String Disponible, String Fechafin){
          
         super(idPaciente, Nombres,  Apellidos, Cedula);
         this.id=id;
@@ -36,13 +36,17 @@ public class CitasMedicas extends Paciente implements HorariosInterface,MotivosI
         this.FechaHora=FechaHora;
         this.Disponible=Disponible;
         this.Direccion=Direccion;
+        this.Fechafin=Fechafin;
     }
 
 
     public int getCodigCita() {
        return CodigCita;
     }
-
+        @Override
+ public int getIdPaciente() {
+        return idPaciente;
+    }
     /* public CitasMedicas(String CodigCita,String Motivo,String Ubicacion,String Doctor,String DetallesMotv, String Horario){
     }*/
     public void setCodigCita(int CodigCita) {
@@ -133,6 +137,22 @@ public class CitasMedicas extends Paciente implements HorariosInterface,MotivosI
     @Override
     public void setNombresdoc(String Nombres) {
     this.nombdoc=Nombres;
+    }
+@Override
+    public String getFechafin() {
+        return Fechafin;
+    }
+@Override
+    public void setFechafin(String Fechafin) {
+        this.Fechafin = Fechafin;
+    }
+
+    public float getCosto() {
+        return Costo;
+    }
+
+    public void setCosto(float Costo) {
+        this.Costo = Costo;
     }
     
     
